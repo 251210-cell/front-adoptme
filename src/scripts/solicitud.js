@@ -1,39 +1,29 @@
 document.addEventListener('DOMContentLoaded', () => {
     const API_BASE = 'http://18.206.62.120:3000/api';
-    const formularioAdopcion = document.querySelector('form');
-    const listContainer = document.getElementById('listaConversaciones');
+    
+    // Usamos el ID exacto que tienes en el HTML
+    const formularioAdopcion = document.getElementById('adoptionForm');
 
-    // --- 1. FUNCIÓN PARA CARGAR (Solo si existe la lista de admin) ---
-    async function cargarSolicitudes() {
-        if (!listContainer) return; 
-        try {
-            const res = await fetch(`${API_BASE}/solicitudes`);
-            const data = await res.json();
-            // Aquí iría tu renderList(data) que ya tienes
-        } catch (e) { console.error(e); }
-    }
-
-    // --- 2. LOGICA DE ENVÍO Y REDIRECCIÓN (Usuario) ---
     if (formularioAdopcion) {
         formularioAdopcion.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            // Obtenemos el ID de la mascota desde la URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const idMascota = urlParams.get('id') || 1; 
+            console.log("Enviando formulario..."); // Para que veas en consola que el botón ya funciona
 
-            // Construimos los datos con los nombres EXACTOS de tu modelo de Sequelize
+            // 1. Obtenemos el ID de la mascota que guardó el index.js
+            const idMascota = localStorage.getItem('mascotaSeleccionadaId') || 1; 
+
+            // 2. Capturamos los datos usando getElementById (como está en tu HTML)
             const datos = {
-                id_usuario: 1, // ID temporal, cámbialo por el del usuario logueado
+                id_usuario: 1, // ID temporal, ajusta según tu sesión
                 id_mascota: parseInt(idMascota),
-                nombre_completo: formularioAdopcion.querySelector('[name="nombre"]')?.value,
-                edad_usuario: parseInt(formularioAdopcion.querySelector('[name="edad"]')?.value),
-                ocupacion: formularioAdopcion.querySelector('[name="ocupacion"]')?.value,
-                motivo_adopcion: formularioAdopcion.querySelector('textarea')?.value,
-                tiene_mascotas_actuales: formularioAdopcion.querySelector('input[name="mascotas"]:checked')?.value || 'No',
-                // Mapeo manual para los campos de texto restantes según tu HTML
-                permiso_casero: formularioAdopcion.querySelectorAll('input[type="text"]')[3]?.value || 'N/A',
-                espacio_suficiente: formularioAdopcion.querySelectorAll('input[type="text"]')[4]?.value || 'N/A',
+                nombre_completo: document.getElementById('nombre').value,
+                edad_usuario: parseInt(document.getElementById('edad').value),
+                ocupacion: document.getElementById('ocupacion').value,
+                motivo_adopcion: document.getElementById('motivo').value,
+                // Captura del radio button
+                tiene_mascotas_actuales: document.querySelector('input[name="mascotas"]:checked')?.value === 'si' ? 'Si' : 'No',
+                permiso_casero: document.getElementById('renta').value || 'N/A',
+                espacio_suficiente: document.getElementById('espacio').value || 'N/A',
                 estado: 'Pendiente'
             };
 
@@ -49,25 +39,23 @@ document.addEventListener('DOMContentLoaded', () => {
                         title: '¡Enviado!',
                         text: 'Tu solicitud se envió con éxito. Redirigiendo...',
                         icon: 'success',
-                        timer: 2000,
+                        timer: 1500,
                         showConfirmButton: false
                     });
 
-                    // EXPLICACIÓN DE LA RUTA:
-                    // Como estás en 'src/views/solicitud.html', 
-                    // simplemente llamamos al archivo que está en la misma carpeta.
-                    window.location.href = './solicitud-enviada.html'; 
+                    // 3. REDIRECCIÓN: Usamos el nombre exacto de tu archivo sin guion
+                    window.location.href = './solicitudenviada.html'; 
 
                 } else {
                     const errorData = await res.json();
-                    throw new Error(errorData.error);
+                    throw new Error(errorData.error || 'Error en el servidor');
                 }
             } catch (err) {
-                console.error("Error al enviar:", err);
-                Swal.fire('Error', 'El servidor no pudo guardar la solicitud. Revisa el Repositorio.', 'error');
+                console.error("Error detallado:", err);
+                Swal.fire('Error', 'No se pudo guardar la solicitud. Verifica la conexión con el servidor.', 'error');
             }
         });
+    } else {
+        console.error("No se encontró el formulario 'adoptionForm' en el HTML");
     }
-
-    cargarSolicitudes();
 });
