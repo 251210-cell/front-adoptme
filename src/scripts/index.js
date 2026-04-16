@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const rol = localStorage.getItem('userRol');
     const nombre = localStorage.getItem('nombreUsuario') || 'Usuario';
 
-    // Redirección si es admin
     if (token && rol === 'admin') {
         window.location.href = 'src/views/index-admin.html';
         return;
@@ -24,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- 2. LÓGICA DEL DROPDOWN (SUBMENÚ DE USUARIO) ---
+    // --- 2. LÓGICA DEL DROPDOWN ---
     const userTrigger = document.getElementById('userTrigger');
     const userMenu = document.getElementById('dropdown-menu-user');
 
@@ -64,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 4. LÓGICA DEL GLOBITO DE CHAT ---
+    // --- 4. GLOBITO DE CHAT ---
     const chatBtn = document.getElementById('chat-bubble-btn');
     const chatWidget = document.getElementById('chat-widget-container');
 
@@ -85,31 +84,22 @@ async function cargarMascotas() {
         const response = await fetch('http://18.206.62.120:3000/api/mascotas');
         const mascotas = await response.json();
         
-        // MODIFICACIÓN: Ya no filtramos por "Adoptado", mostramos todos
+        // NO filtramos, mostramos todos con su color original
         grid.innerHTML = mascotas.map(m => {
             const estadoClase = m.estado ? m.estado.toLowerCase() : 'disponible';
-            const esAdoptado = m.estado === 'Adoptado';
 
             return `
-            <div class="pet-card ${esAdoptado ? 'pet-card-adoptado' : ''}">
+            <div class="pet-card">
                 <div class="card-image" style="position: relative;">
-                    <img src="${m.imagen}" alt="${m.nombre}" 
-                         style="${esAdoptado ? 'filter: grayscale(100%); opacity: 0.6;' : ''}"
-                         onerror="this.src='https://via.placeholder.com/300x200?text=AdoptMe'">
+                    <img src="${m.imagen}" alt="${m.nombre}" onerror="this.src='https://via.placeholder.com/300x200?text=AdoptMe'">
                     <span class="status-badge ${estadoClase}">${m.estado}</span>
                 </div>
                 <div class="card-info">
                     <h3>${m.nombre}, <span>${m.edad}</span></h3>
                     <p class="breed">${m.raza}</p>
-                    
-                    ${esAdoptado 
-                        ? `<button class="btn-conocer" style="background: #7f8c8d; cursor: not-allowed;" onclick="Swal.fire('Final Feliz', 'Este pequeño ya encontró un hogar.', 'success')">
-                               ¡Adoptado! <i class="fas fa-check-circle"></i>
-                           </button>`
-                        : `<button class="btn-conocer" onclick='window.abrirModalPerfil(${JSON.stringify(m).replace(/'/g, "&apos;")})'>
-                               Conóceme <i class="fas fa-heart"></i>
-                           </button>`
-                    }
+                    <button class="btn-conocer" onclick='window.abrirModalPerfil(${JSON.stringify(m).replace(/'/g, "&apos;")})'>
+                        Conóceme <i class="fas fa-heart"></i>
+                    </button>
                 </div>
             </div>
         `}).join('');
@@ -130,6 +120,24 @@ window.abrirModalPerfil = (mascota) => {
     document.getElementById('modal-edad-detalle').innerText = mascota.edad;
     document.getElementById('modal-condicion').innerText = mascota.condicion_especial || "Sin condiciones especiales";
     document.getElementById('modal-descripcion').innerText = mascota.descripcion || "Esperando por un hogar.";
+
+    // --- LÓGICA DEL BOTÓN DENTRO DEL MODAL ---
+    const footerModal = document.querySelector('.modal-footer'); // Asegúrate de que este sea el contenedor del botón
+    if (footerModal) {
+        if (mascota.estado === 'Adoptado') {
+            footerModal.innerHTML = `
+                <div class="mensaje-tierno">
+                    <i class="fas fa-home"></i> ¡Ya estoy con mi nueva familia recibiendo mucho amor! ❤️
+                </div>
+            `;
+        } else {
+            footerModal.innerHTML = `
+                <button class="btn-solicitar" onclick="window.irAFuncionSolicitud()">
+                    Quiero Adoptarlo <i class="fas fa-paw"></i>
+                </button>
+            `;
+        }
+    }
 
     document.getElementById('modal-perfil-container').style.display = 'flex';
 };
