@@ -1,82 +1,106 @@
-import { enviarSolicitudAdopcion } from '../services/api.js';
-
 document.addEventListener('DOMContentLoaded', () => {
-    // --- 1. CONFIGURAR CABECERA (NOMBRE Y AVATAR) ---
-    const nombre = localStorage.getItem('nombreUsuario') || 'Usuario'; 
-    const nDisplay = document.getElementById('nombre-display');
-    const avatarImg = document.getElementById('user-avatar-img');
+    let activeChat = null; 
+    const API_BASE = 'http://18.206.62.120:3000/api';
+    const listContainer = document.getElementById('listaConversaciones');
+    const msgArea = document.getElementById('messagesArea');
 
-    if (nDisplay) nDisplay.innerText = nombre;
-    if (avatarImg) {
-        avatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(nombre)}&background=FF6600&color=fff&rounded=true&bold=true`;
+    async function cargarSolicitudes() {
+        try {
+            const res = await fetch(`${API_BASE}/solicitudes`);
+            if (!res.ok) throw new Error('Error en el servidor');
+            const data = await res.json();
+            
+            const pendientes = data.filter(s => s.estado_solicitud === 'Pendiente' || s.estado_solicitud === 'En Revisión').length;
+            const aprobados = data.filter(s => s.estado_solicitud === 'Aprobada').length;
+
+            if(document.getElementById('count-pendientes')) document.getElementById('count-pendientes').innerText = pendientes;
+            if(document.getElementById('count-aprobados')) document.getElementById('count-aprobados').innerText = aprobados;
+
+            renderList(data);
+        } catch (e) { 
+            console.error("Fallo al cargar:", e);
+            listContainer.innerHTML = '<p style="color:red; padding:10px;">Error al conectar.</p>';
+        }
     }
 
-    // --- 2. ENVÍO DE FORMULARIO ---
-    const form = document.getElementById('adoptionForm');
-    
-    if (form) {
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
+    function renderList(lista) {
+        listContainer.innerHTML = "";
+        lista.forEach(s => {
+            const div = document.createElement('div');
+            div.className = `list-item ${activeChat?.id === s.id ? 'active' : ''}`;
             
-            // Obtenemos los IDs del localStorage
-            const usuarioId = localStorage.getItem('usuarioId');
-            const mascotaId = localStorage.getItem('mascotaSeleccionadaId');
+            const visualEstado = (s.estado_solicitud === 'En Revisión') ? 'Pendiente' : s.estado_solicitud;
+            let badgeClass = s.estado_solicitud === 'Aprobada' ? 'badge-aprobada' : (s.estado_solicitud === 'Rechazada' ? 'badge-rechazada' : 'badge-revision');
 
-            // Validación de seguridad
-            if (!usuarioId || !mascotaId) {
-                Swal.fire({
-                    title: 'Sesión Incompleta',
-                    text: 'Inicia sesión y selecciona una mascota antes de enviar.',
-                    icon: 'warning',
-                    confirmButtonColor: '#FF6600'
-                });
-                return;
-            }
-
-            // Construimos el objeto con los nombres exactos de tu tabla
-            const datos = {
-                id_usuario: parseInt(usuarioId),
-                id_mascota: parseInt(mascotaId),
-                ocupacion: document.getElementById('ocupacion').value,
-                edad_usuario: parseInt(document.getElementById('edad').value),
-                motivo_adopcion: document.getElementById('motivo').value,
-                tiene_mascotas_actuales: document.querySelector('input[name="mascotas"]:checked')?.value === 'si' ? 'Si' : 'No',
-                permiso_casero: document.getElementById('renta').value,
-                espacio_suficiente: document.getElementById('espacio').value
-            };
-
-            try {
-                // A. Guardamos la solicitud en la base de datos
-                await enviarSolicitudAdopcion(datos);
-
-                // B. ACTUALIZAR ESTADO DE LA MASCOTA A "PENDIENTE"
-                // Esto es lo que hace que en el index ya no aparezca como disponible para otros
-                await fetch(`http://18.206.62.120:3000/api/mascotas/${mascotaId}/estado`, {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ estado: 'Pendiente' })
-                });
-
-                // --- REDIRECCIÓN AL ÉXITO ---
-                Swal.fire({
-                    title: '¡Solicitud Enviada!',
-                    text: 'Tu solicitud ha sido enviada y la mascota ahora está en proceso de revisión.',
-                    icon: 'success',
-                    confirmButtonColor: '#FF6600'
-                }).then(() => {
-                    // Redirigimos a la vista de éxito que diseñamos
-                    window.location.href = 'solicitudenviada.html';
-                });
-
-            } catch (error) {
-                console.error("Error al enviar:", error);
-                Swal.fire({
-                    title: 'Error de Servidor',
-                    text: 'No pudimos procesar tu solicitud: ' + error.message,
-                    icon: 'error',
-                    confirmButtonColor: '#d33'
-                });
-            }
+            div.onclick = () => seleccionarSolicitud(s);
+            div.innerHTML = `
+                <div class="item-name"><b>${s.usuario?.nombre_usuario || 'Usuario'}</b></div>
+                <div class="pet-label">Mascota: ${s.mascota?.nombre || '---'}</div>
+                <span class="mini-badge ${badgeClass}">${visualEstado}</span>
+            `;
+            listContainer.appendChild(div);
         });
     }
+
+    function seleccionarSolicitud(solicitud) {
+        activeChat = solicitud;
+        // Refrescamos la lista para mostrar el item activo
+        const items = document.querySelectorAll('.list-item');
+        items.forEach(item => item.classList.remove('active'));
+
+        msgArea.innerHTML = `
+            <div class="detalle-card">
+                <div class="detalle-header">
+                    <h2>Solicitud de ${solicitud.usuario?.nombre_usuario || 'Usuario'}</h2>
+                    <span class="status-pill">${solicitud.estado_solicitud}</span>
+                </div>
+                <div class="detalle-body">
+                    <p><strong>Mascota:</strong> ${solicitud.mascota?.nombre || '---'}</p>
+                    <p><strong>Email:</strong> ${solicitud.usuario?.email || 'No disponible'}</p>
+                    <div class="acciones-container">
+                        <button class="btn-action btn-aprobar" onclick="actualizarEstado(${solicitud.id}, 'Aprobada', ${solicitud.id_mascota})">
+                            <i class="fas fa-check"></i> Aprobar Adopción
+                        </button>
+                        <button class="btn-action btn-rechazar" onclick="actualizarEstado(${solicitud.id}, 'Rechazada', ${solicitud.id_mascota})">
+                            <i class="fas fa-times"></i> Rechazar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    window.actualizarEstado = async (id, nuevoEstado, idMascota) => {
+        const result = await Swal.fire({
+            title: `¿Confirmar ${nuevoEstado}?`,
+            text: `La mascota pasará a estado ${nuevoEstado === 'Aprobada' ? 'Adoptado' : 'Disponible'}.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: nuevoEstado === 'Aprobada' ? '#28a745' : '#d33',
+            confirmButtonText: 'Sí, continuar',
+            cancelButtonText: 'Cancelar'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const res = await fetch(`${API_BASE}/solicitudes/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        estado_solicitud: nuevoEstado, 
+                        mascota_id: idMascota 
+                    })
+                });
+
+                if (res.ok) {
+                    await Swal.fire('¡Actualizado!', `La solicitud ha sido ${nuevoEstado}.`, 'success');
+                    window.location.reload(); // Recargamos para ver los cambios en todo el panel
+                }
+            } catch (error) {
+                Swal.fire('Error', 'No se pudo conectar con el servidor', 'error');
+            }
+        }
+    };
+
+    cargarSolicitudes();
 });
