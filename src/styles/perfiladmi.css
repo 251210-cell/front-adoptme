@@ -1,0 +1,107 @@
+/* --- Estilos Globales --- */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+body { background-color: #f8f9fa; color: #333; }
+a { text-decoration: none; }
+
+/* --- Header --- */
+.main-header {
+    background-color: #ffffff; height: 80px; display: flex;
+    justify-content: space-between; align-items: center; padding: 0 50px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100;
+}
+.logo-container { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 800; color: #333; }
+.logo-icon { color: #FF6600; font-size: 26px; }
+.nav-menu { display: flex; align-items: center; gap: 30px; }
+
+/* --- Contenido Principal --- */
+.main-content { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+.page-header { margin-bottom: 30px; }
+.page-header h1 { font-size: 32px; color: #222; margin-bottom: 5px; }
+.underline { width: 60px; height: 4px; background-color: #FF6600; margin-bottom: 10px; border-radius: 2px; }
+.subtitle { color: #666; }
+
+/* --- Tarjeta de Perfil --- */
+.profile-card {
+    background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1px solid #eee; display: flex; overflow: hidden; flex-wrap: wrap;
+}
+
+/* Columna Izquierda */
+.profile-left {
+    background: #fff8f5; padding: 40px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; flex: 1; min-width: 250px;
+    border-right: 1px solid #eee;
+}
+.avatar-wrapper { position: relative; margin-bottom: 20px; }
+.avatar-wrapper img { 
+    width: 150px; height: 150px; border-radius: 50%; object-fit: cover; 
+    border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+}
+.btn-change-photo {
+    position: absolute; bottom: 5px; right: 5px; width: 40px; height: 40px;
+    border-radius: 50%; background: #FF6600; color: white; border: none;
+    cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: transform 0.3s, background 0.3s;
+}
+.btn-change-photo:hover { background: #e65c00; transform: scale(1.05); }
+.profile-left h2 { color: #333; margin-bottom: 5px; }
+.user-role { color: #FF6600; font-weight: 600; font-size: 14px; }
+
+/* Columna Derecha */
+.profile-right { padding: 40px; flex: 2; min-width: 300px; }
+.profile-right h3 { margin-bottom: 25px; color: #222; }
+
+/* Formulario */
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-weight: 500; color: #555; margin-bottom: 8px; font-size: 14px; }
+.input-wrapper { position: relative; }
+.input-wrapper i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #FF6600; }
+.input-wrapper input {
+    width: 100%; padding: 12px 15px 12px 45px; border: 1px solid #ddd;
+    border-radius: 8px; outline: none; transition: border 0.3s; font-size: 14px; color: #333; font-family: 'Poppins', sans-serif;
+}
+.input-wrapper input:focus { border-color: #FF6600; }
+
+/* Input deshabilitado */
+.input-wrapper input[readonly] { background: #f9f9f9; color: #777; cursor: not-allowed; }
+.input-wrapper input[readonly] ~ i { color: #999; }
+
+/* --- ESTILOS DE BOTONES --- */
+.form-footer { display: flex; justify-content: flex-end; border-top: 1px solid #eee; padding-top: 20px; margin-top: 10px; }
+
+/* Estilo Común Base para Botones */
+.btn-guardar, .btn-outline-naranja {
+    border: none; padding: 12px 25px;
+    border-radius: 8px; font-weight: 600; cursor: pointer; display: flex;
+    align-items: center; gap: 8px; transition: all 0.3s ease; font-family: 'Poppins', sans-serif; font-size: 14px;
+}
+
+/* 1. Botón Naranja Sólido (Guardar Cambios) */
+.btn-guardar {
+    background: #FF6600; color: white;
+}
+.btn-guardar:hover { background: #e65c00; }
+
+/* 2. Botón Outline (Blanco -> Naranja) (Volver al Panel) */
+.btn-outline-naranja {
+    background-color: #ffffff; /* Fondo Blanco por defecto */
+    color: #FF6600; /* Texto/Icono Naranja */
+    border: 2px solid #FF6600; /* Borde Naranja */
+    text-decoration: none;
+}
+
+/* Efecto HOVER para el botón Outline */
+.btn-outline-naranja:hover {
+    background-color: #FF6600; /* Fondo Naranja al pasar mouse */
+    color: #ffffff; /* Texto/Icono Blanco */
+}
+
+/* Ajuste específico para el botón "Volver al Panel" en el nav */
+.nav-menu .nav-btn-back {
+    padding: 10px 20px; /* Un poco más compacto */
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .profile-card { flex-direction: column; }
+    .profile-left { border-right: none; border-bottom: 1px solid #eee; }
+}

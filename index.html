@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopt-Me | Inicio</title>
+    <link rel="stylesheet" href="src/styles/index.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+    <header class="main-header">
+        <a href="index.html" class="logo-container">
+            <i class="fas fa-paw logo-icon"></i>
+            <span>Adopt-Me</span>
+        </a>
+
+        <nav class="nav-menu">
+            <a href="src/views/comoadoptar.html" class="nav-link">Cómo Adoptar</a>
+            <a href="src/views/nosotros.html" class="nav-link">Nosotros</a>
+            
+            <div class="header-buttons" id="botones-invitado">
+                <a href="src/views/login.html" class="btn btn-outline">Iniciar Sesión</a>
+                <a href="src/views/registro.html" class="btn btn-solid">Registrarse</a>
+            </div>
+
+            <div class="user-profile" id="panel-usuario" style="display: none;">
+                <div class="profile-trigger" id="userTrigger">
+                    <span>Hola, <b id="nombre-display">Usuario</b></span>
+                    <img id="user-avatar-img" src="" class="avatar-img">
+                </div>
+                <div class="dropdown-menu" id="dropdown-menu-user">
+                    <a href="src/views/perfil.html"><i class="fas fa-user"></i> Mi Perfil</a>
+                    <button id="btnCerrarSesion" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Encuentra A Tu Nuevo Mejor amigo</h1>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="pets-grid">
+                <div class="loading-state">
+                    <p>Cargando mascotas increíbles...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="modal-perfil-container" class="modal-overlay-vert">
+        <div class="modal-card-vert">
+            <button class="btn-close-vert" onclick="window.cerrarModal()">&times;</button>
+            
+            <div class="modal-body-vert">
+                <div class="col-img-vert">
+                    <span class="badge-vert">Disponible</span>
+                    <img id="modal-foto" src="" alt="Mascota">
+                </div>
+                
+                <div class="col-info-vert">
+                    <div class="header-vert">
+                        <h2 id="modal-nombre-completo">Nombre, <span>Edad</span></h2>
+                        <p id="modal-raza" class="breed-vert">Raza</p>
+                    </div>
+
+                    <div class="details-list-vertical">
+                        <div class="detail-row">
+                            <div class="icon-wrap"><i class="fas fa-calendar-alt icon-orange"></i></div>
+                            <div class="text-wrap">
+                                <span class="label-vert">Edad</span>
+                                <span id="modal-edad-detalle" class="val-vert">...</span>
+                            </div>
+                        </div>
+
+                        <div class="detail-row">
+                            <div class="icon-wrap"><i class="fas fa-map-marker-alt icon-orange"></i></div>
+                            <div class="text-wrap">
+                                <span class="label-vert">Refugio</span>
+                                <span class="val-vert">Refugio Patitas Felices</span>
+                            </div>
+                        </div>
+
+                        <div class="detail-row">
+                            <div class="icon-wrap"><i class="fas fa-heartbeat icon-orange"></i></div>
+                            <div class="text-wrap">
+                                <span class="label-vert">Salud</span>
+                                <div class="pills-container-vert">
+                                    <span class="pill pill-green"><span class="dot g"></span> Vacunado</span>
+                                    <span class="pill pill-blue"><span class="dot b"></span> Esterilizado</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="detail-row">
+                            <div class="icon-wrap"><i class="fas fa-info-circle icon-orange"></i></div>
+                            <div class="text-wrap">
+                                <span class="label-vert">Condición Especial</span>
+                                <span id="modal-condicion" class="val-vert txt-green">Sin discapacidades</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bio-vert">
+                        <h3>Sobre <span id="modal-nombre-bio">Mascota</span></h3>
+                        <p id="modal-descripcion">Cargando descripción...</p>
+                    </div>
+
+                    <div class="footer-vert">
+                        <button class="btn-adopt-vert" onclick="window.irAFuncionSolicitud()">
+                            <i class="far fa-heart"></i> Quiero Adoptarlo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-bubble" id="chat-bubble-btn">
+        <i class="fas fa-comment-dots"></i>
+    </div>
+    
+    <div id="chat-widget-container" class="chat-widget" style="display: none;">
+        <iframe src="src/views/vistachat.html" frameborder="0" style="width:100%; height:100%; border-radius:16px;"></iframe>
+    </div>
+
+    <script src="src/scripts/index.js"></script>
+</body>
+</html>

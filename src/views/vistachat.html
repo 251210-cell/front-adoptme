@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Widget</title>
+    <link rel="stylesheet" href="../styles/vistachat.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="widget-header">
+        <div class="header-left">
+            <div class="avatar-icon">
+                <i class="fas fa-paw"></i>
+            </div>
+            <div class="header-info">
+                <h4>Asistente en línea</h4>
+                <span>Adopt-Me</span>
+            </div>
+        </div>
+        <button class="btn-close-widget" id="btnCloseWidget">✕</button>
+    </div>
+
+    <div class="widget-body" id="messages-area">
+        <p class="chat-intro">¿En qué te puedo ayudar?</p>
+
+        <div class="message received">
+            <img src="https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=50&q=80" class="msg-avatar">
+            <div class="bubble-group">
+                <span class="sender-name">Refugio Adopt-Me</span>
+                <span class="sub-info">Sobre <span style="color:#FF6600">Max</span></span>
+                <div class="bubble">
+                    Puedes venir a conocerlo mañana a partir de las 10:00 AM. ¿Te viene bien ese horario?
+                    <span class="time">10:32 AM</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="message sent">
+            <div class="bubble">
+                Perfecto! Estaré ahí a las 10:30 AM. ¿Necesito llevar algún documento?
+            </div>
+        </div>
+
+        <div class="message received">
+            <div class="bubble">
+                ¡Hola! Claro, Max estará disponible mañana.
+                <span class="time">10:40 AM</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="widget-footer">
+        <input type="text" id="chatInput" placeholder="Escribe tu mensaje...">
+        <button id="chatSendBtn" class="btn-send">
+            <i class="fas fa-paper-plane"></i>
+        </button>
+    </div>
+
+    <script type="module" src="../scripts/vistachat.js"></script>
+</body>
+</html>

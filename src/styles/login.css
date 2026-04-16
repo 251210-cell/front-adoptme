@@ -1,0 +1,191 @@
+/* Reseteo básico */
+* { box-sizing: border-box; }
+
+:root {
+    --naranja: #FF6600;
+    --blanco: #ffffff;
+    --texto-gris: #666;
+    --fondo-input: #f4f4f4;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+    padding: 20px;
+}
+
+/* CONTENEDOR PRINCIPAL */
+.login-container {
+    display: flex;
+    width: 900px;
+    height: 550px; 
+    background: var(--blanco);
+    border-radius: 12px;
+    overflow: hidden; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* --- ESTILOS DE LA IMAGEN (IZQUIERDA) --- */
+.login-image {
+    flex: 1;
+    background-image: url('../assets/images/imagenperrito.png'); 
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+/* Texto limpio sobre la imagen */
+.overlay-text {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    background: transparent !important;
+    color: var(--blanco);
+    z-index: 5;
+}
+
+.overlay-text h3 {
+    margin: 0 0 5px 0;
+    font-size: 22px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.overlay-text .heart { margin-right: 8px; }
+
+.overlay-text p {
+    margin: 0;
+    font-size: 14px;
+    opacity: 0.9;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+/* --- ESTILOS DEL FORMULARIO (DERECHA) --- */
+.login-form-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.form-box {
+    width: 100%;
+    max-width: 320px;
+}
+
+h1 {
+    font-size: 26px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    text-align: center;
+    color: var(--texto-gris);
+    font-size: 14px;
+    margin-bottom: 30px;
+    margin-top: 0;
+}
+
+.input-group { margin-bottom: 20px; }
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background-color: var(--fondo-input);
+    border-radius: 6px;
+    font-size: 14px;
+    color: #333;
+    outline: none;
+}
+
+.input-group input:focus {
+    box-shadow: 0 0 0 2px var(--naranja);
+    background-color: #fff;
+}
+
+/* --- NUEVO: RECORDARME Y OLVIDAR CONTRASEÑA --- */
+.remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 13px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--texto-gris);
+    cursor: pointer;
+}
+
+.remember-me input[type="checkbox"] {
+    accent-color: var(--naranja);
+    cursor: pointer;
+    width: 14px;
+    height: 14px;
+}
+
+.forgot-password {
+    color: var(--naranja);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+    color: #e65c00;
+}
+
+/* --- BOTÓN Y ENLACE INFERIOR --- */
+.btn-primary {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--naranja);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 5px;
+}
+
+.btn-primary:hover { background-color: #e65c00; }
+
+.bottom-link {
+    text-align: center;
+    font-size: 14px;
+    color: var(--texto-gris);
+    margin-top: 25px;
+}
+
+.bottom-link a {
+    color: var(--naranja);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.bottom-link a:hover { text-decoration: underline; }

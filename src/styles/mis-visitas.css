@@ -1,0 +1,90 @@
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+body { background-color: #ffffff; color: #333; }
+a { text-decoration: none; }
+
+/* HEADER */
+.main-header { background: white; height: 80px; display: flex; justify-content: space-between; align-items: center; padding: 0 50px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-bottom: 1px solid #eee; }
+.logo-container { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 800; color: #333; }
+.logo-icon { color: #FF6600; font-size: 26px; }
+.nav-menu { display: flex; align-items: center; gap: 30px; }
+.nav-link { color: #666; font-weight: 600; font-size: 15px; transition: 0.3s; }
+.nav-link:hover { color: #FF6600; }
+.user-profile { display: flex; align-items: center; gap: 15px; }
+.avatar-img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #FF6600; }
+.btn-logout { background: none; border: none; font-size: 18px; color: #666; cursor: pointer; }
+
+/* CONTENIDO */
+.main-content { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+.page-header h1 { font-size: 32px; color: #222; margin-bottom: 5px; font-weight: 700; }
+.underline { width: 60px; height: 4px; background: #FF6600; border-radius: 2px; margin-bottom: 10px; }
+.page-header p { color: #666; margin-bottom: 30px; }
+
+/* TABS (PÍLDORAS NARANJAS) */
+.visits-tabs { display: flex; gap: 12px; margin-bottom: 30px; }
+.v-tab { 
+    padding: 10px 24px; border-radius: 50px; font-size: 14px; font-weight: 600; 
+    cursor: pointer; border: 1px solid #eee; background: white; color: #555; 
+    transition: 0.2s; 
+}
+.v-tab:hover { background: #f9f9f9; }
+.v-tab.active { background: #FF6600; color: white; border-color: #FF6600; box-shadow: 0 4px 10px rgba(255, 102, 0, 0.2); }
+
+/* LISTA */
+.visits-list { display: flex; flex-direction: column; gap: 25px; }
+
+/* TARJETA */
+.visit-card {
+    background: white; border-radius: 16px; padding: 30px;
+    border: 1px solid #f0f0f0; box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+}
+
+.vc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+.dog-info { display: flex; gap: 20px; align-items: center; }
+.dog-thumb { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; }
+.dog-text h3 { font-size: 22px; margin: 0; color: #222; font-weight: 700; }
+.dog-text p { font-size: 14px; color: #777; margin: 2px 0 0 0; display: flex; align-items: center; gap: 5px; }
+
+/* BADGES ESTADO */
+.status-badge { 
+    padding: 6px 16px; border-radius: 50px; font-size: 13px; font-weight: 700; 
+    display: flex; align-items: center; gap: 6px; 
+}
+.status-approved { background: #dcfce7; color: #15803d; } /* Verde suave */
+.status-pending { background: #fef9c3; color: #a16207; } /* Amarillo suave */
+.status-rejected { background: #fee2e2; color: #b91c1c; } /* Rojo suave */
+
+/* DETALLES FECHA */
+.vc-details { 
+    display: flex; gap: 40px; margin-bottom: 20px; font-size: 15px; color: #444; 
+    border-bottom: 1px solid #f5f5f5; padding-bottom: 20px; 
+}
+.vc-details span { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+.vc-details i { color: #FF6600; font-size: 16px; }
+
+/* CAJAS */
+.vc-notes { 
+    background: #f8f9fa; padding: 15px 20px; border-radius: 8px; 
+    font-size: 14px; color: #555; margin-bottom: 20px; 
+}
+.vc-notes strong { color: #222; margin-right: 5px; }
+
+.response-box { 
+    padding: 15px 20px; border-radius: 8px; font-size: 14px; margin-bottom: 20px; 
+    display: flex; gap: 12px; align-items: flex-start;
+}
+.resp-success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+.resp-error { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+
+/* BOTONES VERDE Y ROJO */
+.btn-action { 
+    border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; 
+    cursor: pointer; font-size: 14px; transition: 0.2s; 
+}
+.btn-green { background: #22c55e; color: white; } /* Verde brillante */
+.btn-green:hover { background: #16a34a; }
+
+.btn-red-outline { background: white; border: 1px solid #ef4444; color: #ef4444; }
+.btn-red-outline:hover { background: #fef2f2; }
+
+.btn-orange { background: #FF6600; color: white; }
+.btn-orange:hover { background: #e65c00; }

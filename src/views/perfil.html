@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopt-Me | Mi Perfil</title>
+    <link rel="stylesheet" href="../styles/perfil.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+    <header class="profile-header">
+        <div class="header-left">
+            <a href="javascript:history.back()" class="close-btn"><i class="fas fa-times"></i></a>
+            <div class="header-titles">
+                <h1>Mi Perfil</h1>
+                <p>Gestiona tu información personal</p>
+            </div>
+        </div>
+        <button class="btn-edit-profile" id="btnEditar">
+            <i class="fas fa-pen"></i> Editar Perfil
+        </button>
+        <button class="btn-save-profile" id="btnGuardar" style="display:none;">
+            Guardar Cambios
+        </button>
+    </header>
+
+    <main class="profile-content">
+
+        <div class="card user-card">
+            <div class="user-info-header">
+                <div class="avatar-container">
+                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80" alt="Avatar">
+                </div>
+                <div class="user-details">
+                  <h2 id="nombreTexto">María García</h2>
+                  <input type="text" id="nombreInput" class="edit-input" style="display:none;">
+                    <p class="user-email">juanita@adopt-me.com</p>
+                    <div class="badges">
+                        <span class="badge-member">Miembro desde enero de 2026</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="section-block">
+                <div class="section-header">
+                    <h3>Sobre mí</h3>
+                </div>
+                <p class="description-text" id="descripcionTexto">
+                    Amante de los animales desde pequeña. Busco darle un hogar lleno de amor a un perrito que lo necesite.
+                </p>
+                <textarea id="descripcionInput" class="edit-input" style="display:none;"></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-header">
+                <h3>Información de Contacto</h3>
+            </div>
+            
+            <div class="info-list">
+                <div class="info-item">
+                    <div class="icon-box"><i class="far fa-envelope"></i></div>
+                    <div class="info-text">
+                        <small>Correo Electrónico</small>
+                        <p id="correoTexto">juanita@adopt-me.com</p>
+                        <input type="email" id="correoInput" class="edit-input" style="display:none;">
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="icon-box"><i class="fas fa-phone-alt"></i></div>
+                    <div class="info-text">
+                        <small>Teléfono</small>
+                       <p id="telefonoTexto">+52 55 1234 5678</p>
+                       <input type="text" id="telefonoInput" class="edit-input" style="display:none;">
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="info-text">
+                        <small>Dirección</small>
+                       <p id="direccionTexto">Calle Principal #123</p>
+                       <input type="text" id="direccionInput" class="edit-input" style="display:none;">
+                        <p id="ciudadTexto">Ciudad de México</p>
+                        <input type="text" id="ciudadInput" class="edit-input" style="display:none;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-header">
+                <h3>Información del Hogar</h3>
+            </div>
+
+            <div class="info-item home-type">
+                <div class="icon-box"><i class="fas fa-home"></i></div>
+                <div class="info-text">
+                    <small>Tipo de Vivienda</small>
+                    <p id="viviendaTexto">Casa</p>
+                    <select id="viviendaInput" class="edit-input" style="display:none;">
+                         <option>Casa</option>
+                         <option>Departamento</option>
+                        </select>
+                </div>
+            </div>
+
+            <div class="info-item experience-item">
+                <div class="icon-box orange"><i class="far fa-heart"></i></div>
+                <div class="info-text">
+                    <small>Experiencia con Mascotas</small>
+                   <p id="experienciaTexto">Intermedia</p>
+                   <select id="experienciaInput" class="edit-input" style="display:none;">
+                    <option>Básica</option>
+                    <option>Intermedia</option>
+                    <option>Avanzada</option>
+                </select>
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+
+    <script type="module" src="../scripts/perfil.js"></script>
+</body>
+</html>

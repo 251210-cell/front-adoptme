@@ -1,0 +1,119 @@
+/* --- RESETEO BÁSICO --- */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+body { background-color: #f8f9fa; color: #333; }
+a { text-decoration: none; }
+
+/* --- HEADER --- */
+.stats-header {
+    background: white; height: 80px; padding: 0 50px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.logo-area { display: flex; align-items: center; gap: 10px; }
+.logo-icon { color: #FF6600; font-size: 24px; }
+.brand { font-weight: 800; font-size: 22px; color: #333; }
+
+
+
+.btn-volver {
+    border: 1px solid #FF6600; color: #FF6600; padding: 8px 20px;
+    border-radius: 6px; font-weight: 500; transition: all 0.3s;
+    display: flex; align-items: center; gap: 8px;
+}
+.btn-volver:hover { background: #FF6600; color: white; }
+
+/* --- CONTENIDO --- */
+.main-content { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+
+.title-section h1 { font-size: 32px; font-weight: 600; color: #111; margin-bottom: 5px; }
+.underline { width: 50px; height: 4px; background: #FF6600; border-radius: 2px; margin-bottom: 40px; }
+
+/* --- TARJETAS SUPERIORES --- */
+.cards-container {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px; margin-bottom: 40px;
+}
+
+.stat-card {
+    background: white; padding: 25px; border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    border: 1px solid #eee; position: relative; overflow: hidden;
+}
+
+/* Bordes de colores superiores */
+.border-orange { border-top: 4px solid #FF6600; }
+.border-blue { border-top: 4px solid #2F80ED; }
+.border-yellow { border-top: 4px solid #F2C94C; }
+.border-green { border-top: 4px solid #27AE60; }
+
+.card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.card-top span { color: #666; font-size: 14px; font-weight: 500; }
+.icon-orange { color: #FF6600; font-size: 20px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot.blue { background: #2F80ED; }
+.dot.yellow { background: #F2C94C; }
+.dot.green { background: #27AE60; }
+
+.card-number { font-size: 36px; font-weight: 700; color: #222; margin-bottom: 5px; }
+.card-sub { font-size: 13px; color: #888; }
+.border-blue .card-sub { color: #2F80ED; }
+.border-yellow .card-sub { color: #D4A017; } /* Amarillo más oscuro para leerse */
+.border-green .card-sub { color: #27AE60; }
+
+/* --- SECCIÓN DEL GRÁFICO --- */
+.charts-section {
+    background: white; border-radius: 16px; padding: 40px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+}
+.charts-section h2 { font-size: 20px; color: #333; margin-bottom: 30px; }
+
+.chart-layout {
+    display: flex; gap: 50px; align-items: center; flex-wrap: wrap;
+}
+
+/* Lado Izquierdo: Pastel */
+.pie-chart-container {
+    flex: 1; min-width: 300px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+
+.pie-chart {
+    width: 250px; height: 250px; border-radius: 50%;
+    /* El degradado se llena dinámicamente con JS, aquí ponemos uno por defecto */
+    background: conic-gradient(
+        #2F80ED 0% 17%, 
+        #F2C94C 17% 50%, 
+        #27AE60 50% 100%
+    );
+    margin-bottom: 20px;
+    position: relative;
+}
+/* Círculo blanco al centro si quieres hacerlo "Dona", si no, déjalo sólido como pastel */
+/* .pie-chart::after { content: ""; position: absolute; width: 60%; height: 60%; background: white; border-radius: 50%; top: 20%; left: 20%; } */
+
+.chart-labels { display: flex; gap: 15px; font-size: 12px; }
+.label-text { display: flex; align-items: center; gap: 5px; font-weight: 600; }
+.color-blue { color: #2F80ED; }
+.color-yellow { color: #F2C94C; } /* Amarillo */
+.color-green { color: #27AE60; }
+
+/* Lado Derecho: Detalles */
+.chart-details { flex: 1.2; display: flex; flex-direction: column; gap: 15px; min-width: 300px; }
+
+.detail-box {
+    padding: 20px; border-radius: 10px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-left: 5px solid transparent;
+}
+
+.box-blue { background: #F0F6FF; border-left-color: #2F80ED; }
+.box-yellow { background: #FFFBF0; border-left-color: #F2C94C; }
+.box-green { background: #F0FFF4; border-left-color: #27AE60; }
+
+.detail-left h4 { font-size: 16px; margin-bottom: 4px; color: #333; }
+.detail-left p { font-size: 13px; color: #777; margin: 0; }
+
+.detail-right { text-align: right; }
+.big-num { font-size: 24px; font-weight: 700; display: block; line-height: 1; }
+.small-pct { font-size: 13px; font-weight: 500; }

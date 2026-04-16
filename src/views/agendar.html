@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopt-Me | Agendar Visita</title>
+    <link rel="stylesheet" href="../styles/agendar.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="main-header">
+        <a href="../index.html" class="logo-container">
+            <i class="fas fa-paw logo-icon"></i>
+            <span>Adopt-Me</span>
+        </a>
+        <a href="../index.html" class="btn-close-page">✕ Cerrar</a>
+    </header>
+
+    <main class="main-content">
+        
+        <div class="calendar-container">
+            
+            <div class="cal-header-info">
+                <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=100&q=80" alt="Max">
+                <div>
+                    <h1>Agendar visita con Max</h1>
+                    <p class="refuge-name"><i class="fas fa-map-marker-alt"></i> Refugio Patitas Felices</p>
+                </div>
+            </div>
+
+            <div class="cal-layout">
+                <div class="cal-left">
+                    <h3>Selecciona una fecha</h3>
+                    <div class="calendar-controls">
+                        <button class="cal-nav">←</button>
+                        <span class="month-label">Febrero 2026</span>
+                        <button class="cal-nav">→</button>
+                    </div>
+                    <div class="calendar-days-header">
+                        <span>Dom</span><span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span>
+                    </div>
+                    <div class="calendar-days-grid" id="calendarDays"></div>
+                </div>
+
+                <div class="cal-right">
+                    <h3>Selecciona un horario</h3>
+                    <div class="time-slots">
+                        <button class="time-btn">09:00 AM</button>
+                        <button class="time-btn">10:00 AM</button>
+                        <button class="time-btn">11:00 AM</button>
+                        <button class="time-btn">12:00 PM</button>
+                        <button class="time-btn">02:00 PM</button>
+                        <button class="time-btn">03:00 PM</button>
+                        <button class="time-btn">04:00 PM</button>
+                        <button class="time-btn">05:00 PM</button>
+                    </div>
+
+                    <div class="notes-area">
+                        <label>Notas adicionales</label>
+                        <textarea id="notesInput" placeholder="Ej: Voy con niños pequeños..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-box">
+                <div class="summary-title"><i class="fas fa-check"></i> Resumen de tu visita</div>
+                <div class="summary-grid">
+                    <p><strong>Perrito:</strong> <span class="text-green">Max</span></p>
+                    <p><strong>Refugio:</strong> <span class="text-green">Patitas Felices</span></p>
+                    <p><strong>Fecha:</strong> <span id="summaryDate" class="text-green">Selecciona fecha</span></p>
+                    <p><strong>Hora:</strong> <span id="summaryTime" class="text-green">Selecciona hora</span></p>
+                </div>
+            </div>
+
+            <div class="cal-actions">
+                <a href="../index.html" class="btn-cancel">Cancelar</a>
+                <button class="btn-confirm" id="btnConfirmar">Agendar Visita</button>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script type="module" src="../scripts/agendar.js"></script>
+</body>
+</html>

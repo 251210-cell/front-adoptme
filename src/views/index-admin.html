@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopt-Me | Admin</title>
+    <link rel="stylesheet" href="../styles/index-admin.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo-container">
+            <i class="fas fa-paw logo-icon"></i>
+            <span>Adopt-Me <small>ADMIN</small></span>
+        </div>
+        <nav class="nav-menu">
+            <a href="chat-admin.html" class="nav-link">Mensajes</a>
+            <a href="estadistica.html" class="nav-link">Estadísticas</a>
+            <div class="user-profile" id="panel-admin" onclick="toggleMenuAdmin()">
+                <div class="profile-trigger">
+                    <span>Hola, <b id="adminNombreHeader">Admin</b></span>
+                    <img id="adminAvatar" src="" class="avatar-img">
+                </div>
+                <div class="dropdown-menu" id="dropdown-menu-admin">
+                    <a href="perfiladmi.html"><i class="fas fa-user-shield"></i> Ver Perfil</a>
+                    <button onclick="cerrarSesionAdmin()"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="admin-header-row">
+            <h1>Centro De Adopcion</h1>
+            <div class="underline"></div>
+        </div>
+
+        <div class="toolbar">
+            <div class="left-controls">
+                <div class="filters">
+                    <button class="filter-btn active" onclick="filtrarEstado('Todos')">Todos</button>
+                    <button class="filter-btn" onclick="filtrarEstado('Disponibles')">Disponibles</button>
+                    <button class="filter-btn" onclick="filtrarEstado('Adoptados')">Adoptados</button>
+                    <button class="filter-btn" onclick="filtrarEstado('Pendientes')">Pendientes</button>
+                </div>
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="buscadorMascotas" class="search-input" placeholder="Buscar por nombre...">
+                </div>
+            </div>
+            <button class="btn-add" id="btnAgregarMascota">
+                <i class="fas fa-plus"></i> Agregar Mascota
+            </button>
+        </div>
+
+        <section class="pets-grid"></section>
+    </main>
+
+    <div id="modalEditar" class="modal-overlay-edit hidden">
+        <div class="modal-card-edit">
+            <div class="modal-left">
+                <button class="btn-close-circle" onclick="cerrarModal()"><i class="fas fa-times"></i></button>
+                <span id="editBadge" class="badge-status-overlay">DISPONIBLE</span>
+                <img id="editImagenPreview" src="" alt="Mascota">
+            </div>
+
+            <div class="modal-right">
+                <form id="formEditarMascota" class="edit-form-container">
+                    <div class="sticky-top-bar">
+                        <div class="edit-header-text">
+                            <h2 id="editNombreTitulo">Nombre, Edad</h2>
+                            <p id="editRazaSubtitulo">Raza</p>
+                        </div>
+                        <div class="top-buttons">
+                            <button type="button" class="btn-cancel-edit" onclick="cerrarModal()">Cancelar</button>
+                            <button type="submit" class="btn-save-edit"><i class="fas fa-save"></i> Guardar</button>
+                        </div>
+                    </div>
+
+                    <div class="scrollable-content">
+                        <input type="hidden" id="editId">
+                        <div class="edit-group">
+                            <label><i class="fas fa-calendar-alt"></i> Edad</label>
+                            <div class="edit-input-wrapper">
+                                <input type="text" id="editEdad" required>
+                                <i class="fas fa-pen input-pen"></i>
+                            </div>
+                        </div>
+                        <div class="edit-group">
+                            <label><i class="fas fa-map-marker-alt"></i> Refugio</label>
+                            <div class="edit-input-wrapper">
+                                <input type="text" id="editRefugio" value="Refugio San Cristóbal">
+                                <i class="fas fa-pen input-pen"></i>
+                            </div>
+                        </div>
+                        <div class="edit-group">
+                            <label><i class="fas fa-heartbeat"></i> Estado de Salud</label>
+                            <div class="edit-input-wrapper">
+                                <select id="editSalud">
+                                    <option value="Vacunado">Vacunado</option>
+                                    <option value="Esterilizado">Esterilizado</option>
+                                    <option value="Ambos">Ambos</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="edit-group">
+                            <label><i class="fas fa-info-circle"></i> Condición Especial</label>
+                            <div class="edit-input-wrapper">
+                                <select id="editCondicion">
+                                    <option value="Ninguna">Ninguna</option>
+                                    <option value="Ceguera">Ceguera</option>
+                                    <option value="Sordera">Sordera</option>
+                                    <option value="Movilidad Reducida">Movilidad Reducida</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="edit-group">
+                            <label><i class="fas fa-align-left"></i> Sobre</label>
+                            <div class="edit-input-wrapper">
+                                <textarea id="editDescripcion" rows="4"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../scripts/index-admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopt-Me | Nosotros</title>
+    <link rel="stylesheet" href="../styles/nosotros.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="main-header">
+        <a href="../../index.html" class="logo-container">
+            <i class="fas fa-paw logo-icon"></i>
+            <span>Adopt-Me</span>
+        </a>
+
+        <nav class="nav-menu">
+            <a href="comoadoptar.html" class="nav-link">Cómo Adoptar</a>
+
+            <a href="nosotros.html" class="nav-link active" style="color: #FF6600;">Nosotros</a>
+
+            <a href="estadistica.html" class="nav-link" id="btn-estadisticas" style="display: none;">Estadísticas</a>
+            
+            <div class="header-buttons" id="botones-invitado">
+                <a href="login.html" class="btn btn-outline">Iniciar Sesión</a>
+                <a href="registro.html" class="btn btn-solid">Registrarse</a>
+            </div>
+            <div class="user-profile" id="panel-usuario" style="display: none;">
+                <div class="profile-trigger" onclick="toggleMenu()">
+                    <span class="user-name">Hola, <b id="nombre-display">Usuario</b></span>
+                    <img src="https://ui-avatars.com/api/?name=User&background=FF6600&color=fff"
+                    alt="Avatar" 
+                    class="avatar-img">
+                </div>
+                <div class="dropdown-menu" id="dropdown-menu">
+                    <a href="perfil.html">
+                        <i class="fas fa-user"></i> Ver Perfil
+                    </a>
+                    <button onclick="cerrarSesion()">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+
+        </nav>
+    </header>
+
+    <main class="main-content">
+        
+        <div class="intro-section">
+            <div class="intro-text">
+                <div class="title-group">
+                    <h1>Nosotros</h1>
+                    <div class="underline"></div>
+                </div>
+                
+                <h2>Fundación Adopt-Me</h2>
+                
+                <p>
+                    La Fundación Adopt-Me es una organización sin fines de lucro que trabaja por el bienestar de perros en situación de abandono. Educamos, rescatamos, rehabilitamos y promovemos la adopción responsable para construir un futuro donde ningún animal sufra maltrato.
+                </p>
+                <p>
+                    Desde 2013 creemos en las segundas oportunidades y en el poder de las personas que deciden adoptar, donar y sumarse al cambio.
+                </p>
+            </div>
+
+            <div class="intro-image">
+                <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=1000&q=80" alt="Equipo Voluntarios">
+            </div>
+        </div>
+
+        <div class="objective-card">
+            <h3>Nuestro Objetivo</h3>
+            <p>
+                En Adopt-Me, nuestro objetivo principal es impulsar un cambio de conciencia en la sociedad, fomentando el respeto y la responsabilidad hacia los animales. Buscamos que más personas comprendan la importancia de la adopción, como acciones clave para prevenir el abandono.
+            </p>
+            <p>
+                Sabemos que muchos animales terminan en situación de calle debido a la falta de información y compromiso. Por ello, trabajamos para informar, sensibilizar y motivar a la comunidad a tomar decisiones responsables que ayuden a reducir el número de animales sin hogar.
+            </p>
+            <p>
+                Creemos que cada acción cuenta y que, con educación y participación, es posible construir un futuro más justo y digno para los animales.
+            </p>
+        </div>
+
+        <div class="team-section">
+            <h2>Nuestro equipo</h2>
+            
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="avatar-placeholder"></div>
+                    <h4>Nombre Apellido</h4>
+                    <span class="role">Directora</span>
+                </div>
+
+                <div class="team-card">
+                    <div class="avatar-placeholder"></div>
+                    <h4>Nombre Apellido</h4>
+                    <span class="role">Veterinario</span>
+                </div>
+
+                <div class="team-card">
+                    <div class="avatar-placeholder"></div>
+                    <h4>Nombre Apellido</h4>
+                    <span class="role">Cuidador del santuario</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script type="module" src="../scripts/nosotros.js"></script>
+</body>
+</html>

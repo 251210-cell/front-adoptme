@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopt-Me | Mis Visitas</title>
+    <link rel="stylesheet" href="../styles/mis-visitas.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="main-header">
+        <a href="../index.html" class="logo-container">
+            <i class="fas fa-paw logo-icon"></i>
+            <span>Adopt-Me</span>
+        </a>
+
+        <nav class="nav-menu">
+            <a href="vistachat.html" class="nav-link">
+                <i class="far fa-comment-dots"></i> Mensajes
+            </a>
+            
+            <a href="mis-visitas.html" class="nav-link active" style="color: #FF6600;">
+                <i class="far fa-calendar-alt"></i> Mis Visitas
+            </a>
+
+            <a href="comoadoptar.html" class="nav-link">Cómo Adoptar</a>
+            <a href="nosotros.html" class="nav-link">Nosotros</a>
+
+            <a href="estadistica.html" class="nav-link" id="btn-estadisticas" style="display: none;">Estadísticas</a>
+            
+            <div class="header-buttons" id="botones-invitado">
+                <a href="login.html" class="btn btn-outline">Iniciar Sesión</a>
+                <a href="registro.html" class="btn btn-solid">Registrarse</a>
+            </div>
+
+            <div class="user-profile" id="panel-usuario" style="display: none;">
+                <a href="#" class="profile-link-wrapper" style="text-decoration: none; color: #333; display: flex; align-items: center; gap: 10px;">
+                    <span class="user-name">Hola, <b id="nombre-display">Usuario</b></span>
+                    <img src="https://ui-avatars.com/api/?name=User&background=FF6600&color=fff" alt="Avatar" class="avatar-img">
+                </a>
+                <button onclick="cerrarSesion()" class="btn-logout" title="Cerrar Sesión">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Mis Visitas Agendadas</h1>
+            <div class="underline"></div>
+            <p>Gestiona el estado de tus citas para conocer a los perritos.</p>
+        </div>
+
+        <div class="visits-tabs">
+            <button class="v-tab active" onclick="filtrarVisitas('all')">Todas</button>
+            <button class="v-tab" onclick="filtrarVisitas('pending')">Pendientes</button>
+            <button class="v-tab" onclick="filtrarVisitas('approved')">Aprobadas</button>
+            <button class="v-tab" onclick="filtrarVisitas('rejected')">Rechazadas</button>
+        </div>
+
+        <div class="visits-list" id="visitsList">
+            </div>
+    </main>
+
+    <script type="module" src="../scripts/mis-visitas.js"></script>
+</body>
+</html>

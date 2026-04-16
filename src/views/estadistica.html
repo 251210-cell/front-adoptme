@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopt-Me | Estadísticas</title>
+    <link rel="stylesheet" href="../styles/estadistica.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="stats-header">
+        <div class="logo-area">
+            <i class="fas fa-paw logo-icon"></i>
+            <span class="brand">Adopt-Me</span>
+        </div>
+        <a href="index-admin.html" class="btn-volver">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+    </header>
+
+    <main class="main-content">
+        
+        <div class="title-section">
+            <h1>Panel de Administración</h1>
+            <div class="underline"></div>
+        </div>
+
+        <div class="cards-container">
+            <div class="stat-card border-orange">
+                <div class="card-top">
+                    <span>Total de Perritos</span>
+                    <i class="fas fa-dog icon-orange"></i>
+                </div>
+                <div class="card-number" id="total-count">0</div>
+            </div>
+
+            <div class="stat-card border-blue">
+                <div class="card-top">
+                    <span>Adoptados</span>
+                    <div class="dot blue"></div>
+                </div>
+                <div class="card-number" id="adopted-count">0</div>
+                <p class="card-sub" id="adopted-pct">0% del total</p>
+            </div>
+
+            <div class="stat-card border-yellow">
+                <div class="card-top">
+                    <span>Pendientes</span>
+                    <div class="dot yellow"></div>
+                </div>
+                <div class="card-number" id="pending-count">0</div>
+                <p class="card-sub" id="pending-pct">0% del total</p>
+            </div>
+
+            <div class="stat-card border-green">
+                <div class="card-top">
+                    <span>Disponibles</span>
+                    <div class="dot green"></div>
+                </div>
+                <div class="card-number" id="available-count">0</div>
+                <p class="card-sub" id="available-pct">0% del total</p>
+            </div>
+        </div>
+
+        <div class="charts-section">
+            <h2>Estado de Adopciones</h2>
+            
+            <div class="chart-layout">
+                <div class="pie-chart-container">
+                    <div class="pie-chart" id="adoptionPieChart"></div>
+                    
+                    <div class="chart-labels">
+                        <span class="label-text color-green">Disponibles <span id="lbl-green">0%</span></span>
+                        <span class="label-text color-blue">Adoptados <span id="lbl-blue">0%</span></span>
+                        <span class="label-text color-yellow">Pendientes <span id="lbl-yellow">0%</span></span>
+                    </div>
+                </div>
+
+                <div class="chart-details">
+                    <div class="detail-box box-blue">
+                        <div class="detail-left">
+                            <h4>Perritos Adoptados</h4>
+                            <p>Han encontrado un hogar feliz</p>
+                        </div>
+                        <div class="detail-right color-blue">
+                            <span class="big-num" id="det-adopt-num">0</span>
+                            <span class="small-pct" id="det-adopt-pct">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="detail-box box-yellow">
+                        <div class="detail-left">
+                            <h4>Perritos Pendientes</h4>
+                            <p>En proceso de adopción</p>
+                        </div>
+                        <div class="detail-right color-yellow">
+                            <span class="big-num" id="det-pend-num">0</span>
+                            <span class="small-pct" id="det-pend-pct">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="detail-box box-green">
+                        <div class="detail-left">
+                            <h4>Perritos Disponibles</h4>
+                            <p>Esperando su hogar</p>
+                        </div>
+                        <div class="detail-right color-green">
+                            <span class="big-num" id="det-avail-num">0</span>
+                            <span class="small-pct" id="det-avail-pct">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="../scripts/estadistica.js"></script>
+
+    <script src="../scripts/estadistica.js"></script>
+</body>
+</html>
+

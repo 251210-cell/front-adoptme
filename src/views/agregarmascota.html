@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopt-Me | Registro de Mascotas</title>
+    <link rel="stylesheet" href="../styles/agregarmascota.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo-container">
+            <i class="fas fa-paw logo-icon"></i>
+            <span>Adopt-Me</span>
+        </div>
+        <nav class="nav-menu">
+            <a href="index-admin.html" class="btn-volver">
+                <i class="fas fa-arrow-left"></i> Volver
+            </a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="page-title-container">
+            <h1>Registro De Mascotas</h1>
+            <div class="underline"></div>
+        </div>
+
+        <div class="form-card">
+            <form id="formRegistroMascota">
+                <div class="form-group">
+                    <label class="orange-label">Nombre</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-pen input-icon"></i>
+                        <input type="text" id="nombreMascota" placeholder="Nombre del perro.....">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group flex-2">
+                        <label class="orange-label">Raza</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-dog input-icon"></i>
+                            <input type="text" id="razaMascota" placeholder="Raza del perro.....">
+                        </div>
+                    </div>
+                    <div class="form-group flex-1">
+                        <label class="orange-label">Edad</label>
+                        <div class="input-wrapper">
+                            <i class="far fa-calendar-alt input-icon"></i>
+                            <input type="text" id="edadMascota" placeholder="Ej: 2 años">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="orange-label">Refugio</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-map-marker-alt input-icon"></i>
+                        <input type="text" id="refugioMascota" placeholder="Dirección del refugio...">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="orange-label">Tamaño:</label>
+                    <div class="radio-group">
+                        <label class="radio-option"><input type="radio" name="tamano" value="Pequeno"> Pequeño</label>
+                        <label class="radio-option"><input type="radio" name="tamano" value="Mediano"> Mediano</label>
+                        <label class="radio-option"><input type="radio" name="tamano" value="Grande"> Grande</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="orange-label">Estado De Salud:</label>
+                    <div class="radio-group">
+                        <label class="radio-option"><input type="radio" name="salud" value="Vacunado"> Vacunado</label>
+                        <label class="radio-option"><input type="radio" name="salud" value="Esterilizado"> Esterilizado</label>
+                        <label class="radio-option"><input type="radio" name="salud" value="Ambos"> Ambos</label>
+                        <label class="radio-option"><input type="radio" name="salud" value="Ninguno"> Ninguno</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="orange-label">Condición Especial:</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="condicion_especial" value="Ninguna" checked> Ninguna
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="condicion_especial" value="Ceguera"> Ceguera
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="condicion_especial" value="Sordera"> Sordera
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="condicion_especial" value="Movilidad Reducida"> Movilidad Reducida
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="orange-label">Detalles:</label>
+                    <div class="input-wrapper textarea-wrapper">
+                        <i class="fas fa-pen input-icon"></i>
+                        <textarea id="detallesMascota" placeholder="Descripción..."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="orange-label">Subir Fotografía</label>
+                    <div class="upload-box" id="uploadBox" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-camera" id="cameraIcon"></i>
+                    </div>
+                    <input type="file" id="fileInput" accept="image/*" style="display:none;">
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit" class="btn-guardar">Guardar Datos</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script type="module" src="../scripts/agregarmascota.js"></script>
+</body>
+</html>

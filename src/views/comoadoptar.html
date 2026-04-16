@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopt-Me | Cómo Adoptar</title>
+    <link rel="stylesheet" href="../styles/comoadoptar.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="main-header">
+        <a href="../../index.html" class="logo-container">
+            <i class="fas fa-paw logo-icon"></i>
+            <span>Adopt-Me</span>
+        </a>
+
+        <nav class="nav-menu">
+            <a href="comoadoptar.html" class="nav-link active" style="color: #FF6600;">Cómo Adoptar</a>
+            <a href="nosotros.html" class="nav-link">Nosotros</a>
+            
+            <div class="header-buttons" id="botones-invitado">
+                <a href="login.html" class="btn btn-outline">Iniciar Sesión</a>
+                <a href="registro.html" class="btn btn-solid">Registrarse</a>
+            </div>
+
+            
+            <div class="user-profile" id="panel-usuario" style="display: none;">
+                 <div class="profile-trigger" onclick="toggleMenu()">
+                    <span class="user-name">Hola, <b id="nombre-display">Usuario</b></span>
+                    <img src="https://ui-avatars.com/api/?name=User&background=FF6600&color=fff" 
+                    alt="Avatar" 
+                    class="avatar-img">
+                </div>
+                <div class="dropdown-menu" id="dropdown-menu">
+                    <a href="perfil.html">
+                        <i class="fas fa-user"></i> Ver Perfil
+                    </a>
+                    <button onclick="cerrarSesion()">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Cómo Adoptar</h1>
+            <div class="underline"></div>
+            <p class="subtitle">Adoptar es un proceso sencillo. Sigue estos pasos para darle un hogar a tu nuevo mejor amigo.</p>
+        </div>
+
+        <div class="steps-container">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Explora y elige</h3>
+                    <p>Navega por los perritos disponibles y elige al que mejor se adapte a tu estilo de vida.</p>
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Completa la solicitud</h3>
+                    <p>Llena el formulario de adopción con tus datos y responde las preguntas de forma honesta.</p>
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Revisión y contacto</h3>
+                    <p>El refugio revisará tu solicitud y se pondrá en contacto contigo para continuar el proceso.</p>
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Conoce a tu nuevo amigo</h3>
+                    <p>Una vez tu solicitud sea aceptada, acude al refugio.</p>
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h3>Finaliza la adopción</h3>
+                    <p>Firma la carta compromiso y dale la bienvenida a tu nuevo compañero de vida.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-footer">
+            <a href="../../index.html" class="btn-big">Ver perritos disponibles</a>
+        </div>
+    </main>
+
+    <script type="module" src="../scripts/comoadoptar.js"></script>
+</body>
+</html>

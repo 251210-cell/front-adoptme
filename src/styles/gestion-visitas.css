@@ -1,0 +1,89 @@
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+body { background-color: #ffffff; color: #333; }
+
+/* HEADER */
+.admin-header {
+    height: 70px; border-bottom: 1px solid #eee; display: flex;
+    justify-content: space-between; align-items: center; padding: 0 40px;
+}
+.logo-area { font-size: 20px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+.logo-icon { color: #FF6600; }
+.badge-role { background: #fff3e0; color: #FF6600; padding: 4px 10px; border-radius: 20px; font-size: 12px; margin-left: 10px; border: 1px solid #ffe0b2; }
+.btn-close { color: #666; text-decoration: none; font-size: 16px; transition: 0.2s; }
+.btn-close:hover { color: #333; }
+
+/* CONTENIDO */
+.main-content { max-width: 1100px; margin: 0 auto; padding: 30px; }
+
+.page-title h1 { font-size: 24px; display: inline-block; margin-right: 10px; }
+.badge-admin-label { background: #fff3e0; color: #e65100; font-size: 11px; padding: 2px 8px; border-radius: 4px; vertical-align: middle; }
+.page-title p { color: #777; font-size: 14px; margin-top: 5px; margin-bottom: 25px; }
+
+/* ESTADÍSTICAS SUPERIORES */
+.stats-row { display: flex; gap: 20px; margin-bottom: 30px; }
+.stat-box { flex: 1; padding: 20px; border-radius: 10px; border: 1px solid; }
+.stat-box span { display: block; font-size: 13px; margin-bottom: 5px; font-weight: 500; }
+.stat-box strong { font-size: 24px; }
+
+.blue { background: #f0f7ff; border-color: #cce5ff; color: #004085; }
+.yellow { background: #fff9db; border-color: #ffeeba; color: #856404; }
+.green { background: #e8f5e9; border-color: #c3e6cb; color: #155724; }
+.red { background: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+
+/* TOOLBAR */
+.toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; gap: 20px; flex-wrap: wrap; }
+.search-container { flex: 1; background: #f5f5f5; padding: 12px 15px; border-radius: 8px; display: flex; align-items: center; gap: 10px; }
+.search-container input { border: none; background: transparent; outline: none; width: 100%; color: #555; }
+.search-container i { color: #999; }
+
+.filters { display: flex; gap: 10px; }
+.filter-btn { padding: 8px 16px; border: 1px solid #ddd; background: white; border-radius: 6px; cursor: pointer; color: #555; transition: 0.2s; }
+.filter-btn.active { background: #FF6600; color: white; border-color: #FF6600; }
+
+/* TARJETAS DE VISITAS */
+.visits-container { display: flex; flex-direction: column; gap: 20px; }
+
+.visit-card {
+    border: 1px solid #eee; border-radius: 12px; padding: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03); background: white;
+}
+
+.vc-header { display: flex; justify-content: space-between; margin-bottom: 20px; }
+.user-info { display: flex; gap: 15px; }
+.user-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #eee; }
+.user-text h3 { font-size: 16px; margin: 0; color: #333; }
+.user-text p { font-size: 13px; color: #777; margin: 0; }
+.visit-target { font-size: 13px; color: #555; margin-top: 2px; }
+.visit-target strong { color: #FF6600; }
+
+.status-badge { padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; height: fit-content; }
+.st-pendiente { background: #fff3cd; color: #856404; }
+.st-aprobada { background: #d4edda; color: #155724; }
+.st-rechazada { background: #f8d7da; color: #721c24; }
+
+.vc-details { 
+    display: flex; gap: 20px; background: #f9f9f9; padding: 15px; 
+    border-radius: 8px; margin-bottom: 15px; flex-wrap: wrap;
+}
+.vc-item { font-size: 14px; color: #555; display: flex; align-items: center; gap: 8px; }
+.vc-item i { color: #FF6600; }
+
+.vc-notes { 
+    background: #eef6ff; padding: 12px 15px; border-radius: 8px; 
+    font-size: 13px; color: #004085; margin-bottom: 20px; border: 1px solid #cce5ff;
+}
+
+/* BOTONES DE ACCIÓN */
+.vc-actions { display: flex; gap: 10px; }
+.btn-action { padding: 10px 20px; border-radius: 6px; font-weight: 600; font-size: 14px; cursor: pointer; border: none; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+
+.btn-approve { background: #28a745; color: white; }
+.btn-approve:hover { background: #218838; }
+
+.btn-reject { background: white; border: 1px solid #dc3545; color: #dc3545; }
+.btn-reject:hover { background: #ffe6e6; }
+
+/* CAJAS DE RESPUESTA (CUANDO YA NO HAY BOTONES) */
+.response-box { padding: 12px; border-radius: 6px; font-size: 13px; width: 100%; }
+.rb-green { background: #e8f5e9; color: #155724; border: 1px solid #c3e6cb; }
+.rb-red { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }

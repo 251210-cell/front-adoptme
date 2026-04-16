@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopt-Me | Editar Nosotros</title>
+    <link rel="stylesheet" href="../styles/nosotros-admin.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+    <header class="stats-header">
+        <div class="logo-area">
+            <i class="fas fa-paw logo-icon"></i>
+            <span class="brand">Adopt-Me</span>
+        </div>
+        <a href="index-admin.html" class="btn-volver">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+    </header>
+
+    <main class="main-content">
+        <div class="admin-header">
+            <h1><i class="fas fa-edit"></i> Editar Información "Nosotros"</h1>
+            <p class="subtitle">Gestiona el contenido de la página "Nosotros" que ven los usuarios</p>
+        </div>
+
+        <div class="admin-top-bar">
+            <div class="hamburger-wrapper">
+                <button type="button" class="hamburger-btn" onclick="toggleHamburgerMenu()">
+                    <i class="fas fa-bars"></i> Menú de Secciones
+                </button>
+                
+                <ul id="hamburgerDropdown" class="hamburger-menu hidden">
+                    <li>
+                        <a href="#" onclick="cambiarSeccion('seccion-info', 'Sección de Introducción'); return false;">
+                            <i class="fas fa-info-circle"></i> Sección de Introducción
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="cambiarSeccion('seccion-objetivo', 'Sección Objetivo'); return false;">
+                            <i class="fas fa-bullseye"></i> Sección Objetivo
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="cambiarSeccion('seccion-equipo', 'Sección Miembro'); return false;">
+                            <i class="fas fa-users"></i> Sección Miembro
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <h2 id="seccionActivaTitulo" class="seccion-activa-titulo">Sección de Introducción</h2>
+        </div>
+
+        <form id="formNosotros" class="admin-form">
+            
+            <div id="seccion-info" class="form-section">
+                <div class="form-group">
+                    <label for="tituloPrincipal">Título Principal</label>
+                    <input type="text" id="tituloPrincipal" name="tituloPrincipal" placeholder="Ej: Nosotros" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="subtitulo">Subtítulo</label>
+                    <input type="text" id="subtitulo" name="subtitulo" placeholder="Ej: Fundación Adopt-Me" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="parrafo1">Primer Párrafo</label>
+                    <textarea id="parrafo1" name="parrafo1" rows="4" placeholder="Descripción principal de la fundación..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="parrafo2">Segundo Párrafo</label>
+                    <textarea id="parrafo2" name="parrafo2" rows="4" placeholder="Información adicional..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="imagenIntro">Imagen de Introducción</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="imagenIntro" name="imagenIntro" accept="image/png" onchange="previewImagen(this, 'previewImagenIntro')" class="file-input-hidden">
+                        <label for="imagenIntro" class="file-input-label">
+                            <i class="fas fa-camera"></i>
+                            <span class="file-input-text">Subir Foto</span>
+                            <span class="file-input-name" id="nombreArchivoIntro"></span>
+                        </label>
+                    </div>
+                    <small class="form-hint">Selecciona una imagen PNG para la sección de introducción</small>
+                    <div id="previewImagenIntro" class="image-preview"></div>
+                    <input type="hidden" id="imagenIntroBase64" name="imagenIntroBase64">
+                </div>
+            </div>
+
+            <div id="seccion-objetivo" class="form-section hidden-section">
+                <div class="form-group">
+                    <label for="tituloObjetivo">Título del Objetivo</label>
+                    <input type="text" id="tituloObjetivo" name="tituloObjetivo" placeholder="Ej: Nuestro Objetivo" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="objetivo1">Primer Párrafo del Objetivo</label>
+                    <textarea id="objetivo1" name="objetivo1" rows="4" placeholder="Primer párrafo sobre el objetivo..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="objetivo2">Segundo Párrafo del Objetivo</label>
+                    <textarea id="objetivo2" name="objetivo2" rows="4" placeholder="Segundo párrafo sobre el objetivo..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="objetivo3">Tercer Párrafo del Objetivo</label>
+                    <textarea id="objetivo3" name="objetivo3" rows="4" placeholder="Tercer párrafo sobre el objetivo..." required></textarea>
+                </div>
+            </div>
+
+            <div id="seccion-equipo" class="form-section hidden-section">
+                <div class="form-group">
+                    <label for="tituloEquipo">Título de la Sección</label>
+                    <input type="text" id="tituloEquipo" name="tituloEquipo" placeholder="Ej: Nuestro equipo" required>
+                </div>
+
+                <div id="miembrosEquipo" class="team-members-container">
+                    </div>
+
+                <button type="button" class="btn-add-member" onclick="agregarMiembro()">
+                   <i class="fas fa-plus"></i> Agregar Miembro del Equipo
+                </button>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" onclick="cancelarEdicion()">
+                     Cancelar
+                </button>
+                <button type="button" class="btn-preview" onclick="verVistaPrevia()">
+                     Ver Previa
+                </button>
+                <button type="submit" class="btn-primary">
+                    Guardar Cambios
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <div id="modalVistaPrevia" class="modal-preview-overlay hidden" onclick="if(event.target === this) cerrarVistaPrevia()">
+        <div class="modal-preview-container" onclick="event.stopPropagation()">
+            <div class="modal-preview-header">
+                <span class="modal-preview-label"><i class="fas fa-eye"></i> Vista previa del contenido</span>
+                <button type="button" class="btn-cerrar-preview" onclick="cerrarVistaPrevia()" title="Cerrar">
+                    <i class="fas fa-times"></i> Cerrar
+                </button>
+            </div>
+            <div id="contenidoPreview" class="modal-preview-body">
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../scripts/nosotros-admi.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopt-Me | Gestión de Visitas</title>
+    <link rel="stylesheet" href="../styles/gestion-visitas.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="admin-header">
+        <div class="header-left">
+            <div class="logo-area">
+                <i class="fas fa-paw logo-icon"></i>
+                <span class="brand">Adopt-Me</span>
+            </div>
+            <span class="badge-role">Admin</span>
+        </div>
+        <a href="index-admin.html" class="btn-close">
+            <i class="fas fa-times"></i> Cerrar
+        </a>
+    </header>
+
+    <main class="main-content">
+        
+        <div class="page-title">
+            <h1>Gestión de Visitas</h1>
+            <span class="badge-admin-label">Admin</span>
+            <p>Administra las solicitudes de visitas de los usuarios</p>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-box blue">
+                <span>Total de Visitas</span>
+                <strong>5</strong>
+            </div>
+            <div class="stat-box yellow">
+                <span>Pendientes</span>
+                <strong>3</strong>
+            </div>
+            <div class="stat-box green">
+                <span>Aprobadas</span>
+                <strong>1</strong>
+            </div>
+            <div class="stat-box red">
+                <span>Rechazadas</span>
+                <strong>1</strong>
+            </div>
+        </div>
+
+        <div class="toolbar">
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Buscar por usuario, perrito o email...">
+            </div>
+            <div class="filters">
+                <button class="filter-btn active" onclick="filtrar('all')">Todas</button>
+                <button class="filter-btn" onclick="filtrar('pendiente')">Pendientes</button>
+                <button class="filter-btn" onclick="filtrar('aprobada')">Aprobadas</button>
+                <button class="filter-btn" onclick="filtrar('rechazada')">Rechazadas</button>
+            </div>
+        </div>
+
+        <div class="visits-container" id="visitsContainer">
+            </div>
+
+    </main>
+
+    <script type="module" src="../scripts/gestion-visitas.js"></script>
+</body>
+</html>

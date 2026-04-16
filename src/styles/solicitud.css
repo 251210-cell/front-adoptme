@@ -1,0 +1,223 @@
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+body {
+    background-color: #fdfdfd; /* Un blanco roto muy suave */
+    /* Usamos una imagen de patitas con transparencia (RGBA) */
+    background-image: linear-gradient(rgb(255, 255, 255), rgba(255, 255, 255, 0.96)), 
+                      url('https://i.pinimg.com/originals/81/2f/18/812f18f673f8484a0c5c36199341656c.png'); 
+    background-size: 200px; /* Tamaño de las patitas */
+    background-repeat: repeat; /* Para que llenen toda la pantalla */
+    opacity: 1; /* Mantenemos la opacidad total del fondo */
+    transition: opacity 0.5s; /* Efecto suave de carga */
+}
+a { text-decoration: none; }
+
+/* HEADER */
+.main-header {
+    background-color: #ffffff; height: 80px; display: flex;
+    justify-content: space-between; align-items: center; padding: 0 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100;
+}
+.logo-container { display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 800; color: #333; }
+.logo-icon { color: #FF6600; font-size: 26px; }
+.nav-menu { display: flex; align-items: center; gap: 30px; margin-left:auto;}
+.nav-link { color: #666; font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 8px; transition: color 0.3s; }
+.nav-link:hover { color: #FF6600; }
+.header-buttons { display: flex; gap: 15px; }
+
+/* Botones y Perfil */
+.btn { padding: 10px 24px; border-radius: 6px; font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.3s; }
+.btn-outline { border: 2px solid #FF6600; color: #FF6600; background: transparent; }
+.btn-outline:hover { background-color: #fff0e6; }
+.btn-solid { background-color: #FF6600; color: white; border: 2px solid #FF6600; }
+.btn-solid:hover { background-color: #e65c00; border-color: #e65c00; }
+.user-profile { 
+    display: flex;
+    align-items: center;
+    gap: 15px; 
+    cursor: pointer;
+}
+.profile-trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-name { color: #333; font-size: 15px; }
+.avatar-img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #FF6600; object-fit: cover; }
+.dropdown-menu {
+    position: absolute;
+    top: 55px;
+    right: 0;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    width: 170px;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.dropdown-menu a,
+.dropdown-menu button {
+    padding: 12px 15px;
+    text-align: left;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    width: 100%;
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu button:hover {
+    background: #FF6600;
+    color: white;
+}
+.dropdown-menu i {
+    font-size: 14px;
+}
+
+/* Mostrar menú */
+.dropdown-menu.active {
+    display: flex;
+}
+
+/* --- CONTENIDO PRINCIPAL --- */
+.main-content {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Título */
+.page-header { margin-bottom: 30px; }
+.page-header h1 { font-size: 32px; color: #222; margin-bottom: 5px; }
+.underline { width: 50px; height: 4px; background-color: #FF6600; margin-bottom: 15px; border-radius: 2px; }
+.page-header p { color: #666; font-size: 16px; }
+
+/* --- TARJETA DEL FORMULARIO --- */
+.form-card {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+/* Títulos de sección (Naranja) */
+.section-title {
+    color: #FF6600;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+/* Espacio extra arriba para secciones siguientes */
+.input-group + .section-title { margin-top: 30px; }
+
+/* Inputs y Etiquetas */
+.input-group { margin-bottom: 20px; }
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+
+/* Estilo de los campos de texto (Gris suave sin borde) */
+.input-group input[type="text"],
+.input-group input[type="number"] {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: #f0f2f5; /* Color gris de fondo */
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    transition: all 0.3s;
+}
+
+.input-group input:focus {
+    outline: none; 
+    background-color: #fff;
+    border-color: #ddd;
+    box-shadow: 0 0 0 2px rgba(255, 102, 0, 0.1);
+}
+
+/* Filas (para poner Nombre y Edad juntos) */
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+/* Radio Buttons */
+.radio-group {
+    display: flex;
+    gap: 20px;
+    margin-top: 5px;
+}
+
+.radio-option input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    position: relative;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.radio-option input[type="radio"]:checked {
+    border-color: #FF6600;
+}
+
+.radio-option input[type="radio"]:checked::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background: #FF6600;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+
+/* Botón de Enviar */
+.form-footer {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.btn-submit {
+    background-color: #FF6600;
+    color: white;
+    border: none;
+    padding: 12px 50px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition:  0.3s;
+    width: 100%;
+    max-width: 300px; /* Ancho máximo del botón */
+}
+
+.btn-submit:hover {
+    background-color: #e65c00;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .form-row { flex-direction: column; gap: 0; }
+    .main-header { padding: 0 20px; }
+    .form-card { padding: 25px; }
+}
+
