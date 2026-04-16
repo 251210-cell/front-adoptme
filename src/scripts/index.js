@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const rol = localStorage.getItem('userRol');
     const nombre = localStorage.getItem('nombreUsuario') || 'Usuario';
 
+    // Redirección si es admin
     if (token && rol === 'admin') {
         window.location.href = 'src/views/index-admin.html';
         return;
@@ -23,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- 2. LÓGICA DEL DROPDOWN ---
+    // --- 2. LÓGICA DEL DROPDOWN (SUBMENÚ DE USUARIO) ---
     const userTrigger = document.getElementById('userTrigger');
     const userMenu = document.getElementById('dropdown-menu-user');
 
@@ -63,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 4. GLOBITO DE CHAT ---
+    // --- 4. LÓGICA DEL GLOBITO DE CHAT ---
     const chatBtn = document.getElementById('chat-bubble-btn');
     const chatWidget = document.getElementById('chat-widget-container');
 
@@ -84,6 +85,7 @@ async function cargarMascotas() {
         const response = await fetch('http://18.206.62.120:3000/api/mascotas');
         const mascotas = await response.json();
         
+        // Renderizamos TODAS las mascotas (con su color original)
         grid.innerHTML = mascotas.map(m => {
             const estadoClase = m.estado ? m.estado.toLowerCase() : 'disponible';
             return `
@@ -106,12 +108,13 @@ async function cargarMascotas() {
     }
 }
 
-// --- 5. FUNCIONES GLOBALES PARA EL MODAL (VERSION FINAL BLINDADA) ---
+// --- 5. FUNCIONES GLOBALES PARA EL MODAL (CORREGIDAS) ---
 window.abrirModalPerfil = (mascota) => {
     localStorage.setItem('mascotaSeleccionadaId', mascota.id);
     localStorage.setItem('mascotaSeleccionadaNombre', mascota.nombre);
     localStorage.setItem('mascotaSeleccionadaFoto', mascota.imagen);
 
+    // Llenar datos básicos
     const modalImg = document.getElementById('modal-foto');
     if (modalImg) modalImg.src = mascota.imagen;
 
@@ -121,37 +124,32 @@ window.abrirModalPerfil = (mascota) => {
     document.getElementById('modal-condicion').innerText = mascota.condicion_especial || "Sin condiciones especiales";
     document.getElementById('modal-descripcion').innerText = mascota.descripcion || "Esperando por un hogar.";
 
-    // --- LÓGICA DE SUSTITUCIÓN DE FOOTER ---
-    // Buscamos el div que contiene los botones del modal (ajusta la clase si es diferente)
-    const footerModal = document.querySelector('.modal-footer'); 
-    const estadoLower = mascota.estado.toLowerCase();
+    // LÓGICA DE CONTROL DEL BOTÓN DE ADOPCIÓN
+    const btnSolicitar = document.querySelector('.btn-solicitar');
+    let mensajeTierno = document.getElementById('mensaje-tierno-modal');
 
-    if (footerModal) {
-        if (estadoLower === 'disponible') {
-            // SOLO si está disponible inyectamos el botón de adopción
-            footerModal.innerHTML = `
-                <button class="btn-solicitar" onclick="window.irAFuncionSolicitud()">
-                    Quiero Adoptarlo <i class="fas fa-paw"></i>
-                </button>
-            `;
-        } else if (estadoLower === 'adoptado') {
-            // Si está adoptado: Mensaje azul tierno
-            footerModal.innerHTML = `
-                <div style="background: #e3f2fd; color: #1565c0; padding: 15px; border-radius: 12px; text-align: center; border: 2px dashed #64b5f6; font-weight: bold; width: 100%;">
-                    <i class="fas fa-home"></i> ¡Ya estoy con mi nueva familia recibiendo mucho amor! ❤️
-                </div>
-            `;
-        } else if (estadoLower === 'pendiente') {
-            // Si está pendiente: Mensaje naranja de advertencia
-            footerModal.innerHTML = `
-                <div style="background: #fff3e0; color: #e65100; padding: 15px; border-radius: 12px; text-align: center; border: 2px dashed #ffb74d; font-weight: bold; width: 100%;">
-                    <i class="fas fa-clock"></i> ¡Estamos revisando solicitudes para mi adopción! 🐾
-                </div>
-            `;
-        } else {
-            // Cualquier otro estado por si acaso
-            footerModal.innerHTML = `<p style="text-align:center; color:gray;">Estado de mascota: ${mascota.estado}</p>`;
+    // Si no existe el contenedor del mensaje, lo creamos
+    if (!mensajeTierno) {
+        mensajeTierno = document.createElement('div');
+        mensajeTierno.id = 'mensaje-tierno-modal';
+        if (btnSolicitar && btnSolicitar.parentNode) {
+            btnSolicitar.parentNode.insertBefore(mensajeTierno, btnSolicitar);
         }
+    }
+
+    if (mascota.estado === 'Adoptado') {
+        // Bloqueo para adoptados
+        if (btnSolicitar) btnSolicitar.style.display = 'none';
+        mensajeTierno.style.display = 'block';
+        mensajeTierno.innerHTML = `
+            <div style="background: #f0f8ff; color: #1e88e5; padding: 15px; border-radius: 12px; text-align: center; border: 2px dashed #1e88e5; font-weight: bold; width: 100%; margin-top: 10px;">
+                <i class="fas fa-home"></i> ¡Ya estoy con mi nueva familia recibiendo mucho amor! ❤️
+            </div>
+        `;
+    } else {
+        // Habilitado para disponibles/pendientes
+        if (btnSolicitar) btnSolicitar.style.display = 'block';
+        mensajeTierno.style.display = 'none';
     }
 
     document.getElementById('modal-perfil-container').style.display = 'flex';
