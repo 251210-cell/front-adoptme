@@ -25,18 +25,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- 2. LÓGICA DEL DROPDOWN (SUBMENÚ DE USUARIO) ---
-    // Este es el trigger (la flechita o el nombre) y el menú que se despliega
     const userTrigger = document.getElementById('userTrigger');
     const userMenu = document.getElementById('dropdown-menu-user');
 
     if (userTrigger && userMenu) {
         userTrigger.addEventListener('click', (e) => {
-            e.stopPropagation(); // Evita que el click se propague
+            e.stopPropagation();
             userMenu.classList.toggle('active');
-            console.log("Menú clickeado"); // Para debug
         });
 
-        // Cerrar el menú si se hace click fuera de él
         document.addEventListener('click', () => {
             if (userMenu.classList.contains('active')) {
                 userMenu.classList.remove('active');
@@ -61,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }).then((result) => {
                 if (result.isConfirmed) {
                     localStorage.clear();
-                    window.location.reload(); // Recarga para volver al estado invitado
+                    window.location.reload();
                 }
             });
         });
@@ -88,22 +85,31 @@ async function cargarMascotas() {
         const response = await fetch('http://18.206.62.120:3000/api/mascotas');
         const mascotas = await response.json();
         
-        const mostrar = mascotas.filter(m => m.estado !== 'Adoptado');
+        // MODIFICACIÓN: Ya no filtramos por "Adoptado", mostramos todos
+        grid.innerHTML = mascotas.map(m => {
+            const estadoClase = m.estado ? m.estado.toLowerCase() : 'disponible';
+            const esAdoptado = m.estado === 'Adoptado';
 
-        grid.innerHTML = mostrar.map(m => {
-            const estadoClase = m.estado.toLowerCase(); 
             return `
-            <div class="pet-card">
+            <div class="pet-card ${esAdoptado ? 'pet-card-adoptado' : ''}">
                 <div class="card-image" style="position: relative;">
-                    <img src="${m.imagen}" alt="${m.nombre}" onerror="this.src='https://via.placeholder.com/300x200?text=AdoptMe'">
+                    <img src="${m.imagen}" alt="${m.nombre}" 
+                         style="${esAdoptado ? 'filter: grayscale(100%); opacity: 0.6;' : ''}"
+                         onerror="this.src='https://via.placeholder.com/300x200?text=AdoptMe'">
                     <span class="status-badge ${estadoClase}">${m.estado}</span>
                 </div>
                 <div class="card-info">
                     <h3>${m.nombre}, <span>${m.edad}</span></h3>
                     <p class="breed">${m.raza}</p>
-                    <button class="btn-conocer" onclick='window.abrirModalPerfil(${JSON.stringify(m).replace(/'/g, "&apos;")})'>
-                        Conóceme <i class="fas fa-heart"></i>
-                    </button>
+                    
+                    ${esAdoptado 
+                        ? `<button class="btn-conocer" style="background: #7f8c8d; cursor: not-allowed;" onclick="Swal.fire('Final Feliz', 'Este pequeño ya encontró un hogar.', 'success')">
+                               ¡Adoptado! <i class="fas fa-check-circle"></i>
+                           </button>`
+                        : `<button class="btn-conocer" onclick='window.abrirModalPerfil(${JSON.stringify(m).replace(/'/g, "&apos;")})'>
+                               Conóceme <i class="fas fa-heart"></i>
+                           </button>`
+                    }
                 </div>
             </div>
         `}).join('');
