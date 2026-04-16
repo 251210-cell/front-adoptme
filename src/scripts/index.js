@@ -84,10 +84,8 @@ async function cargarMascotas() {
         const response = await fetch('http://18.206.62.120:3000/api/mascotas');
         const mascotas = await response.json();
         
-        // NO filtramos, mostramos todos con su color original
         grid.innerHTML = mascotas.map(m => {
             const estadoClase = m.estado ? m.estado.toLowerCase() : 'disponible';
-
             return `
             <div class="pet-card">
                 <div class="card-image" style="position: relative;">
@@ -108,34 +106,51 @@ async function cargarMascotas() {
     }
 }
 
-// FUNCIONES GLOBALES PARA EL MODAL
+// --- 5. FUNCIONES GLOBALES PARA EL MODAL (VERSION FINAL BLINDADA) ---
 window.abrirModalPerfil = (mascota) => {
     localStorage.setItem('mascotaSeleccionadaId', mascota.id);
     localStorage.setItem('mascotaSeleccionadaNombre', mascota.nombre);
     localStorage.setItem('mascotaSeleccionadaFoto', mascota.imagen);
 
-    document.getElementById('modal-foto').src = mascota.imagen;
+    const modalImg = document.getElementById('modal-foto');
+    if (modalImg) modalImg.src = mascota.imagen;
+
     document.getElementById('modal-nombre-completo').innerHTML = `${mascota.nombre}, <span>${mascota.edad}</span>`;
     document.getElementById('modal-raza').innerText = mascota.raza;
     document.getElementById('modal-edad-detalle').innerText = mascota.edad;
     document.getElementById('modal-condicion').innerText = mascota.condicion_especial || "Sin condiciones especiales";
     document.getElementById('modal-descripcion').innerText = mascota.descripcion || "Esperando por un hogar.";
 
-    // --- LÓGICA DEL BOTÓN DENTRO DEL MODAL ---
-    const footerModal = document.querySelector('.modal-footer'); // Asegúrate de que este sea el contenedor del botón
+    // --- LÓGICA DE SUSTITUCIÓN DE FOOTER ---
+    // Buscamos el div que contiene los botones del modal (ajusta la clase si es diferente)
+    const footerModal = document.querySelector('.modal-footer'); 
+    const estadoLower = mascota.estado.toLowerCase();
+
     if (footerModal) {
-        if (mascota.estado === 'Adoptado') {
-            footerModal.innerHTML = `
-                <div class="mensaje-tierno">
-                    <i class="fas fa-home"></i> ¡Ya estoy con mi nueva familia recibiendo mucho amor! ❤️
-                </div>
-            `;
-        } else {
+        if (estadoLower === 'disponible') {
+            // SOLO si está disponible inyectamos el botón de adopción
             footerModal.innerHTML = `
                 <button class="btn-solicitar" onclick="window.irAFuncionSolicitud()">
                     Quiero Adoptarlo <i class="fas fa-paw"></i>
                 </button>
             `;
+        } else if (estadoLower === 'adoptado') {
+            // Si está adoptado: Mensaje azul tierno
+            footerModal.innerHTML = `
+                <div style="background: #e3f2fd; color: #1565c0; padding: 15px; border-radius: 12px; text-align: center; border: 2px dashed #64b5f6; font-weight: bold; width: 100%;">
+                    <i class="fas fa-home"></i> ¡Ya estoy con mi nueva familia recibiendo mucho amor! ❤️
+                </div>
+            `;
+        } else if (estadoLower === 'pendiente') {
+            // Si está pendiente: Mensaje naranja de advertencia
+            footerModal.innerHTML = `
+                <div style="background: #fff3e0; color: #e65100; padding: 15px; border-radius: 12px; text-align: center; border: 2px dashed #ffb74d; font-weight: bold; width: 100%;">
+                    <i class="fas fa-clock"></i> ¡Estamos revisando solicitudes para mi adopción! 🐾
+                </div>
+            `;
+        } else {
+            // Cualquier otro estado por si acaso
+            footerModal.innerHTML = `<p style="text-align:center; color:gray;">Estado de mascota: ${mascota.estado}</p>`;
         }
     }
 
