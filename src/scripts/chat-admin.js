@@ -1,89 +1,48 @@
 document.addEventListener('DOMContentLoaded', () => {
-    let activeChat = null; // Guardará el objeto de la solicitud seleccionada
-
+    let activeChat = null; 
+    const API_BASE = 'http://18.206.62.120:3000/api';
     const listContainer = document.getElementById('listaConversaciones');
     const msgArea = document.getElementById('messagesArea');
-    const chatHeader = document.getElementById('chatHeaderContainer');
-    const inputArea = document.getElementById('inputAreaContainer');
 
-    // 1. Cargar solicitudes reales
     async function cargarSolicitudes() {
         try {
-            const res = await fetch('http://18.206.62.120:3000/api/solicitudes');
+            const res = await fetch(`${API_BASE}/solicitudes`);
             const data = await res.json();
+            
+            // Sumamos ambos estados como "Pendientes" para el admin
+            const pendientes = data.filter(s => s.estado === 'Pendiente' || s.estado === 'En Revisión').length;
+            const aprobados = data.filter(s => s.estado === 'Aprobada').length;
+            
+            document.getElementById('count-pendientes').innerText = pendientes;
+            document.getElementById('count-aprobados').innerText = aprobados;
+
             renderList(data);
-        } catch (e) { console.error("Error cargando solicitudes"); }
+        } catch (e) { 
+            console.error("Error al cargar lista", e); 
+        }
     }
+
     function renderList(lista) {
-        const listContainer = document.getElementById('listaConversaciones');
         listContainer.innerHTML = "";
         lista.forEach(s => {
             const div = document.createElement('div');
-            // Usamos list-item que es lo que definimos en el CSS
             div.className = `list-item ${activeChat?.id === s.id ? 'selected' : ''}`;
+            
+            // Estética de los badges
+            let badgeClass = 'badge-revision'; 
+            if(s.estado === 'Aprobada') badgeClass = 'badge-aprobada';
+            if(s.estado === 'Rechazada') badgeClass = 'badge-rechazada';
+
             div.onclick = () => seleccionarSolicitud(s);
             div.innerHTML = `
-                <span class="item-name">${s.nombre_usuario || 'Usuario Desconocido'}</span>
-                <span class="pet-label">Interesado en: ${s.nombre_mascota}</span>
-                <div><span class="mini-badge">${s.estado}</span></div>
+                <div class="item-name"><b>${s.usuario?.nombre_completo || 'Usuario'}</b></div>
+                <div class="pet-label">Mascota: ${s.mascota?.nombre}</div>
+                <span class="mini-badge ${badgeClass}">${s.estado}</span>
             `;
             listContainer.appendChild(div);
         });
     }
 
-    function seleccionarSolicitud(solicitud) {
-        activeChat = solicitud;
-        chatHeader.style.display = 'flex';
-        inputArea.style.display = 'block';
-        document.getElementById('header-name').innerText = solicitud.nombre_usuario;
-        document.getElementById('header-pet').innerText = solicitud.nombre_mascota;
-        renderList([]); // Refrescar selección visual
-        cargarMensajes(solicitud.usuario_id);
-    }
-
-    // 2. Función para APROBAR o RECHAZAR
-    window.actualizarEstadoSolicitud = async (nuevoEstado) => {
-        if (!activeChat) return;
-
-        const animalEstado = nuevoEstado === 'Aprobada' ? 'Adoptado' : 'Disponible';
-
-        const result = await Swal.fire({
-            title: `¿Confirmas marcar como ${nuevoEstado}?`,
-            text: `La mascota pasará a estar "${animalEstado}"`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#FF6600',
-            confirmButtonText: 'Sí, confirmar'
-        });
-
-        if (result.isConfirmed) {
-            try {
-                // LLAMADA A LA API: Actualiza Solicitud Y Mascota al mismo tiempo
-                await fetch(`http://18.206.62.120:3000/api/solicitudes/${activeChat.id}`, {
-                    method: 'PUT',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ 
-                        estado_solicitud: nuevoEstado,
-                        estado_mascota: animalEstado,
-                        mascota_id: activeChat.mascota_id
-                    })
-                });
-
-                Swal.fire('¡Hecho!', `Estado actualizado a ${nuevoEstado}`, 'success');
-                cargarSolicitudes(); // Recargar lista
-                cerrarChatActual();
-            } catch (e) {
-                Swal.fire('Error', 'No se pudo actualizar', 'error');
-            }
-        }
-    };
-
-    window.cerrarChatActual = () => {
-        activeChat = null;
-        chatHeader.style.display = 'none';
-        inputArea.style.display = 'none';
-        msgArea.innerHTML = '<div class="empty-state"><h3>Selecciona una solicitud</h3></div>';
-    };
-
+    // Aquí irían tus funciones de seleccionarSolicitud y enviarMensaje que ya tienes...
     cargarSolicitudes();
 });

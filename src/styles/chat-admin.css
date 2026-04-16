@@ -86,3 +86,123 @@ body { background-color: #ffffff; height: 100vh; display: flex; flex-direction: 
     background: #FF6600; color: white; border: none; padding: 0 15px;
     border-radius: 8px; cursor: pointer;
 }
+/* --- MEJORAS DE ESTILO --- */
+.admin-main-container {
+    background-color: #f8f9fa; /* Fondo gris muy clarito para que resalte el blanco */
+}
+
+.chat-sidebar {
+    background: white;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.02);
+}
+
+/* Tarjetas de la izquierda más bonitas */
+.list-item {
+    padding: 18px 20px;
+    border-bottom: 1px solid #f1f1f1;
+    border-left: 4px solid transparent;
+}
+
+.list-item:hover {
+    background: #fffcfb;
+}
+
+.list-item.selected {
+    background: #fff5ed;
+    border-left-color: #FF6600;
+}
+
+/* Badges de estado dinámicos */
+.mini-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.badge-revision { background: #fff4e5; color: #ff8c00; }
+.badge-aprobada { background: #e6f4ea; color: #1e7e34; }
+.badge-rechazada { background: #fce8e6; color: #d93025; }
+
+/* Panel de Chat */
+.chat-panel {
+    margin: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+}
+
+.messages-container {
+    background-image: radial-gradient(#e5e7eb 0.5px, transparent 0.5px);
+    background-size: 20px 20px; /* Sutil patrón de puntos para que no se vea tan blanco */
+}
+/* Contenedor de la lista */
+.conversations-list {
+    padding: 10px;
+    background: #fff;
+}
+
+/* Cada tarjeta de solicitud */
+.list-item {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+}
+
+/* Efecto Hover */
+.list-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border-color: #ffe0cc;
+}
+
+/* Cuando está seleccionada */
+.list-item.selected {
+    background: #fff5ed;
+    border-color: #ff6600;
+    border-left: 5px solid #ff6600;
+}
+
+/* Estilo de los textos internos */
+.item-name {
+    font-weight: 700;
+    color: #333;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pet-label {
+    font-size: 12px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.pet-label i { color: #ff6600; }
+
+/* Los Badges (Etiquetas de estado) */
+.mini-badge {
+    align-self: flex-start;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-revision { background: #fff4e5; color: #ff8c00; }
+.badge-aprobada { background: #e6f4ea; color: #1e7e34; }
+.badge-rechazada { background: #fce8e6; color: #d93025; }
