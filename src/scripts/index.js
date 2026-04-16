@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const rol = localStorage.getItem('userRol');
     const nombre = localStorage.getItem('nombreUsuario') || 'Usuario';
 
+    // Redirección si es admin
     if (token && rol === 'admin') {
         window.location.href = 'src/views/index-admin.html';
         return;
@@ -23,60 +24,60 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Dropdown Usuario
-    const trigger = document.getElementById('userTrigger');
-    const menu = document.getElementById('dropdown-menu-user');
-    if (trigger && menu) {
-        trigger.addEventListener('click', (e) => {
-            e.stopPropagation();
-            menu.classList.toggle('active');
+    // --- 2. LÓGICA DEL DROPDOWN (SUBMENÚ DE USUARIO) ---
+    // Este es el trigger (la flechita o el nombre) y el menú que se despliega
+    const userTrigger = document.getElementById('userTrigger');
+    const userMenu = document.getElementById('dropdown-menu-user');
+
+    if (userTrigger && userMenu) {
+        userTrigger.addEventListener('click', (e) => {
+            e.stopPropagation(); // Evita que el click se propague
+            userMenu.classList.toggle('active');
+            console.log("Menú clickeado"); // Para debug
+        });
+
+        // Cerrar el menú si se hace click fuera de él
+        document.addEventListener('click', () => {
+            if (userMenu.classList.contains('active')) {
+                userMenu.classList.remove('active');
+            }
         });
     }
 
-    // Cerrar Sesión
-    document.getElementById('btnCerrarSesion')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        Swal.fire({
-            title: '¿Quieres salir?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#FF6600',
-            confirmButtonText: 'Sí, salir'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                localStorage.clear();
-                window.location.reload();
-            }
+    // --- 3. BOTÓN CERRAR SESIÓN ---
+    const btnCerrar = document.getElementById('btnCerrarSesion');
+    if (btnCerrar) {
+        btnCerrar.addEventListener('click', (e) => {
+            e.preventDefault();
+            Swal.fire({
+                title: '¿Quieres cerrar sesión?',
+                text: "Tendrás que volver a ingresar para adoptar.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#FF6600',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, salir',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.clear();
+                    window.location.reload(); // Recarga para volver al estado invitado
+                }
+            });
         });
-    });
+    }
 
-    // --- 2. LÓGICA DEL GLOBITO DE CHAT (NUEVO) ---
+    // --- 4. LÓGICA DEL GLOBITO DE CHAT ---
     const chatBtn = document.getElementById('chat-bubble-btn');
     const chatWidget = document.getElementById('chat-widget-container');
 
     if (chatBtn && chatWidget) {
         chatBtn.addEventListener('click', () => {
-            if (chatWidget.style.display === 'none' || chatWidget.style.display === '') {
-                chatWidget.style.display = 'block';
-            } else {
-                chatWidget.style.display = 'none';
-            }
+            chatWidget.style.display = (chatWidget.style.display === 'none' || chatWidget.style.display === '') ? 'block' : 'none';
         });
     }
 
-    // --- 3. CARGAR MASCOTAS ---
     cargarMascotas();
-
-    // Reabrir modal desde URL
-    const params = new URLSearchParams(window.location.search);
-    const idAabrir = params.get('abrirPerfil');
-    if (idAabrir) {
-        setTimeout(() => {
-            fetch(`http://18.206.62.120:3000/api/mascotas/${idAabrir}`)
-                .then(res => res.json())
-                .then(m => { if(m) window.abrirModalPerfil(m); });
-        }, 800);
-    }
 });
 
 async function cargarMascotas() {
@@ -86,12 +87,16 @@ async function cargarMascotas() {
     try {
         const response = await fetch('http://18.206.62.120:3000/api/mascotas');
         const mascotas = await response.json();
-        const disponibles = mascotas.filter(m => m.estado === 'Disponible');
+        
+        const mostrar = mascotas.filter(m => m.estado !== 'Adoptado');
 
-        grid.innerHTML = disponibles.map(m => `
+        grid.innerHTML = mostrar.map(m => {
+            const estadoClase = m.estado.toLowerCase(); 
+            return `
             <div class="pet-card">
-                <div class="card-image">
+                <div class="card-image" style="position: relative;">
                     <img src="${m.imagen}" alt="${m.nombre}" onerror="this.src='https://via.placeholder.com/300x200?text=AdoptMe'">
+                    <span class="status-badge ${estadoClase}">${m.estado}</span>
                 </div>
                 <div class="card-info">
                     <h3>${m.nombre}, <span>${m.edad}</span></h3>
@@ -101,13 +106,13 @@ async function cargarMascotas() {
                     </button>
                 </div>
             </div>
-        `).join('');
+        `}).join('');
     } catch (error) {
         console.error("Error API:", error);
     }
 }
 
-// FUNCIONES GLOBALES (MODAL)
+// FUNCIONES GLOBALES PARA EL MODAL
 window.abrirModalPerfil = (mascota) => {
     localStorage.setItem('mascotaSeleccionadaId', mascota.id);
     localStorage.setItem('mascotaSeleccionadaNombre', mascota.nombre);
@@ -115,11 +120,10 @@ window.abrirModalPerfil = (mascota) => {
 
     document.getElementById('modal-foto').src = mascota.imagen;
     document.getElementById('modal-nombre-completo').innerHTML = `${mascota.nombre}, <span>${mascota.edad}</span>`;
-    document.getElementById('modal-nombre-bio').innerText = mascota.nombre;
     document.getElementById('modal-raza').innerText = mascota.raza;
     document.getElementById('modal-edad-detalle').innerText = mascota.edad;
-    document.getElementById('modal-condicion').innerText = mascota.condicion_especial || "Sin discapacidades";
-    document.getElementById('modal-descripcion').innerText = mascota.descripcion || "Un compañero increíble esperando por ti.";
+    document.getElementById('modal-condicion').innerText = mascota.condicion_especial || "Sin condiciones especiales";
+    document.getElementById('modal-descripcion').innerText = mascota.descripcion || "Esperando por un hogar.";
 
     document.getElementById('modal-perfil-container').style.display = 'flex';
 };
@@ -129,14 +133,17 @@ window.cerrarModal = () => {
 };
 
 window.irAFuncionSolicitud = () => {
-    if (localStorage.getItem('token')) {
+    const token = localStorage.getItem('token');
+    if (token) {
         window.location.href = 'src/views/solicitud.html';
     } else {
         Swal.fire({
             title: '¡Inicia Sesión!',
-            text: 'Necesitas una cuenta para adoptar.',
+            text: 'Necesitas una cuenta para iniciar el proceso de adopción.',
             icon: 'info',
             confirmButtonColor: '#FF6600'
-        }).then(() => window.location.href = 'src/views/login.html');
+        }).then(() => {
+            window.location.href = 'src/views/login.html';
+        });
     }
 };

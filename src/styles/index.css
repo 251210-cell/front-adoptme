@@ -453,3 +453,24 @@ a { text-decoration: none; }
     .col-img-vert { height: 250px; }
     .modal-card-vert { height: 95vh; overflow-y: auto; }
 }
+.card-image {
+    position: relative;
+    overflow: hidden;
+}
+
+.status-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: white;
+    z-index: 10;
+}
+
+.status-badge.disponible { background-color: #259453; }
+.status-badge.pendiente { background-color: #f1c40f; color: #333; }
+.status-badge.adoptado { background-color: #e74c3c; }
