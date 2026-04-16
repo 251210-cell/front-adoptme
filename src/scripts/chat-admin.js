@@ -14,19 +14,18 @@ document.addEventListener('DOMContentLoaded', () => {
             renderList(data);
         } catch (e) { console.error("Error cargando solicitudes"); }
     }
-
     function renderList(lista) {
+        const listContainer = document.getElementById('listaConversaciones');
         listContainer.innerHTML = "";
         lista.forEach(s => {
             const div = document.createElement('div');
+            // Usamos list-item que es lo que definimos en el CSS
             div.className = `list-item ${activeChat?.id === s.id ? 'selected' : ''}`;
             div.onclick = () => seleccionarSolicitud(s);
             div.innerHTML = `
-                <div class="item-content">
-                    <span class="item-name">${s.nombre_usuario}</span>
-                    <span class="pet-label">Mascota: ${s.nombre_mascota}</span>
-                    <span class="mini-badge">${s.estado}</span>
-                </div>
+                <span class="item-name">${s.nombre_usuario || 'Usuario Desconocido'}</span>
+                <span class="pet-label">Interesado en: ${s.nombre_mascota}</span>
+                <div><span class="mini-badge">${s.estado}</span></div>
             `;
             listContainer.appendChild(div);
         });
