@@ -29,9 +29,7 @@
 
         <div class="admin-top-bar">
             <div class="hamburger-wrapper">
-                <button type="button" class="hamburger-btn" onclick="toggleHamburgerMenu()">
-                    <i class="fas fa-bars"></i> Menú de Secciones
-                </button>
+               
                 
                 <ul id="hamburgerDropdown" class="hamburger-menu hidden">
                     <li>
@@ -77,22 +75,9 @@
                     <label for="parrafo2">Segundo Párrafo</label>
                     <textarea id="parrafo2" name="parrafo2" rows="4" placeholder="Información adicional..." required></textarea>
                 </div>
+                
 
-                <div class="form-group">
-                    <label for="imagenIntro">Imagen de Introducción</label>
-                    <div class="file-input-wrapper">
-                        <input type="file" id="imagenIntro" name="imagenIntro" accept="image/png" onchange="previewImagen(this, 'previewImagenIntro')" class="file-input-hidden">
-                        <label for="imagenIntro" class="file-input-label">
-                            <i class="fas fa-camera"></i>
-                            <span class="file-input-text">Subir Foto</span>
-                            <span class="file-input-name" id="nombreArchivoIntro"></span>
-                        </label>
-                    </div>
-                    <small class="form-hint">Selecciona una imagen PNG para la sección de introducción</small>
-                    <div id="previewImagenIntro" class="image-preview"></div>
-                    <input type="hidden" id="imagenIntroBase64" name="imagenIntroBase64">
-                </div>
-            </div>
+                
 
             <div id="seccion-objetivo" class="form-section hidden-section">
                 <div class="form-group">
@@ -131,7 +116,8 @@
             </div>
 
             <div class="form-actions">
-            
+                <button type="button" class="btn-secondary" onclick="cancelarEdicion()">
+                     Cancelar
             
                 <button type="submit" class="btn-primary">
                     Guardar Cambios

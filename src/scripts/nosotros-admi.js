@@ -1,23 +1,13 @@
-
 let contadorMiembros = 0;
 const API_NOSOTROS = 'http://18.206.62.120:3000/api/nosotros';
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. SEGURIDAD
     const token = localStorage.getItem('token');
-    const nombreLS = localStorage.getItem('nombreUsuario');
     const rol = localStorage.getItem('userRol');
-    const isLogged = (!!token && token !== 'undefined') || !!nombreLS;
 
-    if (!isLogged || rol !== 'admin') {
-        Swal.fire({
-            icon: 'error',
-            title: 'Acceso denegado',
-            text: 'Esta área es solo para administradores.',
-            confirmButtonColor: '#FF6600'
-        }).then(() => {
-            window.location.href = '../../index.html';
-        });
+    if (!token || rol !== 'admin') {
+        window.location.href = '../../index.html';
         return;
     }
 
@@ -25,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cargarDatos();
     cargarMiembrosEquipo();
 
-    // 3. EVENTOS
+    // 3. EVENTO GUARDAR
     const form = document.getElementById('formNosotros');
     if (form) {
         form.addEventListener('submit', (e) => {
@@ -34,73 +24,71 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Cerrar menú hamburguesa
-    document.addEventListener('click', function (event) {
+    // Cerrar menú hamburguesa al hacer clic fuera
+    document.addEventListener('click', (e) => {
         const menu = document.getElementById('hamburgerDropdown');
         const btn = document.querySelector('.hamburger-btn');
-        if (menu && btn && !btn.contains(event.target) && !menu.contains(event.target)) {
+        if (menu && btn && !btn.contains(e.target) && !menu.contains(e.target)) {
             menu.classList.add('hidden');
         }
     });
 });
 
 // ==========================================
-// FUNCIONES DE CARGA Y UI
+// FUNCIONES DE CARGA
 // ==========================================
 
 async function cargarDatos() {
-    let datos = {};
     try {
         const res = await fetch(API_NOSOTROS);
+        let datos = {};
+        
         if (res.ok) {
             datos = await res.json();
             localStorage.setItem('datosNosotros', JSON.stringify(datos));
+        } else {
+            datos = JSON.parse(localStorage.getItem('datosNosotros') || '{}');
         }
+
+        // Llenar campos de texto principales
+        document.getElementById('tituloPrincipal').value = datos.tituloPrincipal || '';
+        document.getElementById('subtitulo').value = datos.subtitulo || '';
+        document.getElementById('parrafo1').value = datos.parrafo1 || '';
+        document.getElementById('parrafo2').value = datos.parrafo2 || '';
+        
+        // Objetivos
+        document.getElementById('tituloObjetivo').value = datos.tituloObjetivo || '';
+        document.getElementById('objetivo1').value = datos.objetivo1 || '';
+        document.getElementById('objetivo2').value = datos.objetivo2 || '';
+        document.getElementById('objetivo3').value = datos.objetivo3 || '';
+        
+        document.getElementById('tituloEquipo').value = datos.tituloEquipo || '';
+        
     } catch (e) {
-        console.warn('Usando cache local:', e);
+        console.warn('Error en carga:', e);
     }
-    
-    if (!datos || Object.keys(datos).length === 0) {
-        datos = JSON.parse(localStorage.getItem('datosNosotros') || '{}');
-    }
-
-    // Llenar inputs
-    document.getElementById('tituloPrincipal').value = datos.tituloPrincipal || '';
-    document.getElementById('subtitulo').value = datos.subtitulo || '';
-    document.getElementById('parrafo1').value = datos.parrafo1 || '';
-    document.getElementById('parrafo2').value = datos.parrafo2 || '';
-    document.getElementById('imagenIntroBase64').value = datos.imagenIntro || '';
-
-    if (datos.imagenIntro) {
-        document.getElementById('previewImagenIntro').innerHTML = `<img src="${datos.imagenIntro}" alt="Preview">`;
-    }
-
-    document.getElementById('tituloObjetivo').value = datos.tituloObjetivo || '';
-    document.getElementById('objetivo1').value = datos.objetivo1 || '';
-    document.getElementById('objetivo2').value = datos.objetivo2 || '';
-    document.getElementById('objetivo3').value = datos.objetivo3 || '';
-    document.getElementById('tituloEquipo').value = datos.tituloEquipo || '';
 }
 
 async function cargarMiembrosEquipo() {
-    let datos = JSON.parse(localStorage.getItem('datosNosotros') || '{}');
     try {
         const res = await fetch(API_NOSOTROS);
-        if (res.ok) datos = await res.json();
-    } catch (e) {}
+        let datos = res.ok ? await res.json() : JSON.parse(localStorage.getItem('datosNosotros') || '{}');
+        const miembros = datos.miembrosEquipo || [];
+        
+        const container = document.getElementById('miembrosEquipo');
+        container.innerHTML = '';
 
-    const miembros = datos.miembrosEquipo || [];
-    const container = document.getElementById('miembrosEquipo');
-    container.innerHTML = '';
-
-    if (miembros.length === 0) {
-        crearTarjetaMiembro();
-    } else {
-        miembros.forEach((m, i) => crearTarjetaMiembro(m.nombre, m.rol, m.imagen, i));
+        if (miembros.length === 0) {
+            crearTarjetaMiembro();
+        } else {
+            miembros.forEach((m, i) => crearTarjetaMiembro(m.nombre, m.rol, i));
+        }
+    } catch (e) {
+        console.error('Error al cargar equipo:', e);
     }
 }
 
-function crearTarjetaMiembro(nombre = '', rol = '', imagen = '', indice = null) {
+function crearTarjetaMiembro(nombre = '', rol = '', indice = null) {
     const container = document.getElementById('miembrosEquipo');
     const id = indice !== null ? indice : contadorMiembros++;
 
@@ -108,71 +96,53 @@ function crearTarjetaMiembro(nombre = '', rol = '', imagen = '', indice = null) 
     memberCard.className = 'member-card';
     memberCard.setAttribute('data-indice', id);
 
+    // SOLO CAMPOS DE TEXTO
     memberCard.innerHTML = `
         <div class="member-card-header">
-            <h3><i class="fas fa-user"></i> Miembro</h3>
-            <button type="button" class="btn-remove-member" onclick="eliminarMiembro(${id})">Eliminar</button>
+            <h3><i class="fas fa-user"></i> Miembro del Equipo</h3>
+            <button type="button" class="btn-remove-member" onclick="eliminarMiembro(${id})">
+                <i class="fas fa-trash"></i> Eliminar
+            </button>
         </div>
-        <input type="text" class="member-nombre" placeholder="Nombre" value="${nombre}">
-        <input type="text" class="member-rol" placeholder="Rol" value="${rol}">
-        <input type="file" onchange="previewImagenMiembro(this, ${id})">
-        <input type="hidden" class="member-imagen-base64" value="${imagen}">
-        <div id="previewMiembro${id}">${imagen ? `<img src="${imagen}">` : ''}</div>
+        <div class="member-fields">
+            <div class="form-group">
+                <label>Nombre Completo</label>
+                <input type="text" class="member-nombre" placeholder="Nombre" value="${nombre}">
+            </div>
+            <div class="form-group">
+                <label>Cargo</label>
+                <input type="text" class="member-rol" placeholder="Ej: Veterinario" value="${rol}">
+            </div>
+        </div>
     `;
     container.appendChild(memberCard);
 }
 
 // ==========================================
-// LÓGICA DE IMÁGENES Y GUARDADO
+// GUARDAR CAMBIOS
 // ==========================================
-
-async function subirImagenABackend(file, callback) {
-    if (!file) return;
-    const formData = new FormData();
-    formData.append('image', file);
-
-    try {
-        const res = await fetch('http://18.206.62.120:3000/api/upload', {
-            method: 'POST',
-            body: formData
-        });
-        const data = await res.json();
-        callback(data.url);
-    } catch (e) {
-        console.error("Error subiendo imagen:", e);
-    }
-}
-
-function previewImagenMiembro(input, id) {
-    if (input.files && input.files[0]) {
-        subirImagenABackend(input.files[0], (url) => {
-            const card = input.closest('.member-card');
-            card.querySelector('.member-imagen-base64').value = url;
-            document.getElementById(`previewMiembro${id}`).innerHTML = `<img src="${url}">`;
-        });
-    }
-}
 
 async function guardarDatos() {
     const datos = {
-        tituloPrincipal: document.getElementById('tituloPrincipal').value,
-        subtitulo: document.getElementById('subtitulo').value,
-        parrafo1: document.getElementById('parrafo1').value,
-        parrafo2: document.getElementById('parrafo2').value,
-        imagenIntro: document.getElementById('imagenIntroBase64').value,
-        tituloObjetivo: document.getElementById('tituloObjetivo').value,
-        objetivo1: document.getElementById('objetivo1').value,
-        objetivo2: document.getElementById('objetivo2').value,
-        objetivo3: document.getElementById('objetivo3').value,
-        tituloEquipo: document.getElementById('tituloEquipo').value,
+        tituloPrincipal: document.getElementById('tituloPrincipal').value.trim(),
+        subtitulo: document.getElementById('subtitulo').value.trim(),
+        parrafo1: document.getElementById('parrafo1').value.trim(),
+        parrafo2: document.getElementById('parrafo2').value.trim(),
+        tituloObjetivo: document.getElementById('tituloObjetivo').value.trim(),
+        objetivo1: document.getElementById('objetivo1').value.trim(),
+        objetivo2: document.getElementById('objetivo2').value.trim(),
+        objetivo3: document.getElementById('objetivo3').value.trim(),
+        tituloEquipo: document.getElementById('tituloEquipo').value.trim(),
         miembrosEquipo: []
     };
 
+    // Recoger solo textos de los miembros
     document.querySelectorAll('.member-card').forEach(card => {
-        const nombre = card.querySelector('.member-nombre').value;
-        const rol = card.querySelector('.member-rol').value;
-        const imagen = card.querySelector('.member-imagen-base64').value;
-        if (nombre && rol) datos.miembrosEquipo.push({ nombre, rol, imagen });
+        const nombre = card.querySelector('.member-nombre').value.trim();
+        const rol = card.querySelector('.member-rol').value.trim();
+        if (nombre && rol) {
+            datos.miembrosEquipo.push({ nombre, rol });
+        }
     });
 
     try {
@@ -184,12 +154,24 @@ async function guardarDatos() {
             },
             body: JSON.stringify(datos)
         });
-        if (res.ok) Swal.fire('¡Guardado!', 'Los datos se actualizaron.', 'success');
+
+        if (res.ok) {
+            localStorage.setItem('datosNosotros', JSON.stringify(datos));
+            Swal.fire('¡Éxito!', 'Los textos se actualizaron correctamente.', 'success');
+        } else {
+            Swal.fire('Error', 'No se pudo guardar la información.', 'error');
+        }
     } catch (e) {
-        Swal.fire('Error', 'No se pudo conectar al servidor', 'error');
+        Swal.fire('Error', 'Fallo de conexión con el servidor.', 'error');
     }
 }
 
-// Auxiliares de UI
-function toggleHamburgerMenu() { document.getElementById('hamburgerDropdown').classList.toggle('hidden'); }
-function eliminarMiembro(id) { document.querySelector(`.member-card[data-indice="${id}"]`).remove(); }
+// Funciones Globales para botones
+window.agregarMiembro = function() { crearTarjetaMiembro(); }
+window.eliminarMiembro = function(id) { 
+    const card = document.querySelector(`.member-card[data-indice="${id}"]`);
+    if(card) card.remove(); 
+}
+window.toggleHamburgerMenu = function() { 
+    document.getElementById('hamburgerDropdown').classList.toggle('hidden'); 
+}
