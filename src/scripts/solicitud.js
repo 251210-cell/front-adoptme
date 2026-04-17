@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     window.location.href = './solicitudenviada.html';
                 } else {
                     const errorData = await res.json();
-                    Swal.fire('Error', errorData.message || 'Usted ya a adoptado,intrnte luego', 'error');
+                    Swal.fire('Error', errorData.message || 'Usted ya a adoptado,intente luego', 'error');
                 }
             } catch (err) {
                 Swal.fire('Error', 'No se pudo conectar con el servidor.', 'error');
