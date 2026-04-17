@@ -17,6 +17,22 @@ async function actualizarEstadoMascota(idMascota, nuevoEstado) {
     return false;
 }
 
+async function verificarEstadoUsuario() {
+    const idUsuario = localStorage.getItem('userId');
+    const res = await fetch(`http://18.206.62.120:3000/api/solicitudes/usuario/${idUsuario}`);
+    const solicitudes = await res.json();
+
+    const yaAdopto = solicitudes.some(s => s.estado === 'Aprobada');
+    
+    if (yaAdopto) {
+        document.getElementById('adoptionForm').innerHTML = `
+            <div class="alert-info">
+                <h2>¡Ya eres adoptante!</h2>
+                <p>Nuestra política actual permite una adopción por cuenta de usuario.</p>
+            </div>
+        `;
+    }
+}
 document.addEventListener('DOMContentLoaded', async () => {
     const API_BASE = 'http://18.206.62.120:3000/api';
     const formularioAdopcion = document.getElementById('adoptionForm');
