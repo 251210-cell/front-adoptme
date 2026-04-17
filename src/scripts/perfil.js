@@ -1,88 +1,123 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. LEER LOS DATOS DEL LOGIN
+    const userId = localStorage.getItem('usuarioId'); 
+    const token = localStorage.getItem('token');
 
-    const campos = [
-        "nombre",
-        "descripcion",
-        "correo",
-        "telefono",
-        "direccion",
-        "ciudad",
-        "vivienda",
-        "experiencia"
-    ];
+    // Si no hay ID, mandamos al login
+    if (!userId) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Sesión expirada',
+            text: 'Por favor, inicia sesión para gestionar tu perfil.',
+            confirmButtonText: 'Ir al Login'
+        }).then(() => {
+            window.location.href = 'login.html'; 
+        });
+        return;
+    }
 
-    // Cargar datos guardados
-    campos.forEach(campo => {
-        const texto = document.getElementById(campo + "Texto");
-        const input = document.getElementById(campo + "Input");
+    // USAMOS TU IP DE AWS
+    const BASE_URL = 'http://18.206.62.120:3000';
+    const API_URL = `${BASE_URL}/api/usuarios/${userId}`;
 
-        const guardado = localStorage.getItem(campo + "Usuario");
+    const mapaCampos = {
+        "nombre": "nombre_usuario",
+        "descripcion": "biografia",
+        "correo": "email",
+        "telefono": "telefono",
+        "direccion": "direccion",
+        "ciudad": "ciudad",
+        "vivienda": "tipo_vivienda",
+        "experiencia": "experiencia_mascotas"
+    };
 
-        if (guardado && texto) {
-            texto.textContent = guardado;
-        }
-    });
-
+    const idsHtml = Object.keys(mapaCampos);
     const btnEditar = document.getElementById("btnEditar");
     const btnGuardar = document.getElementById("btnGuardar");
 
-    // EDITAR
+    // === CARGAR DATOS ===
+    async function cargarDatos() {
+        try {
+            console.log("Intentando conectar a:", API_URL);
+            const response = await fetch(API_URL);
+            
+            if (!response.ok) throw new Error("Error en la respuesta del servidor");
+            
+            const user = await response.json();
+
+            idsHtml.forEach(id => {
+                const dbCol = mapaCampos[id];
+                const display = document.getElementById(id + "Texto");
+                if (display && user[dbCol]) {
+                    display.textContent = user[dbCol];
+                }
+            });
+
+            // Foto de perfil
+            const imgElement = document.querySelector('.avatar-container img');
+            if (user.foto_perfil) {
+                imgElement.src = user.foto_perfil;
+            } else {
+                imgElement.src = `https://ui-avatars.com/api/?name=${user.nombre_usuario || 'User'}&background=random`;
+            }
+
+        } catch (error) {
+            console.error("Error cargando perfil:", error);
+            Swal.fire('Error', 'No se pudo conectar con el servidor en ' + BASE_URL, 'error');
+        }
+    }
+
+    cargarDatos();
+
+    // === MODO EDICIÓN ===
     btnEditar.addEventListener("click", () => {
-
-        campos.forEach(campo => {
-            const texto = document.getElementById(campo + "Texto");
-            const input = document.getElementById(campo + "Input");
-
+        idsHtml.forEach(id => {
+            const texto = document.getElementById(id + "Texto");
+            const input = document.getElementById(id + "Input");
             if (texto && input) {
-                input.value = texto.textContent;
-
+                input.value = texto.textContent.trim();
                 texto.style.display = "none";
                 input.style.display = "block";
             }
         });
-
         btnEditar.style.display = "none";
         btnGuardar.style.display = "inline-block";
     });
 
-    // GUARDAR
-    btnGuardar.addEventListener("click", () => {
-
-        campos.forEach(campo => {
-            const texto = document.getElementById(campo + "Texto");
-            const input = document.getElementById(campo + "Input");
-
-            if (texto && input) {
+    // === GUARDAR (PUT) ===
+    btnGuardar.addEventListener("click", async () => {
+        const payload = {};
+        idsHtml.forEach(id => {
+            const input = document.getElementById(id + "Input");
+            if (input) {
                 const valor = input.value.trim();
-
-                localStorage.setItem(campo + "Usuario", valor);
-                texto.textContent = valor;
-
-                texto.style.display = "block";
-                input.style.display = "none";
+                // Solo mandamos el dato si el usuario escribió algo
+                if (valor !== "") {
+                    payload[mapaCampos[id]] = valor;
+                }
             }
         });
-
-        btnEditar.style.display = "inline-block";
-        btnGuardar.style.display = "none";
-
-        // ==================================================
-        // NUEVA ALERTA ANIMADA CON SWEETALERT
-        // ==================================================
-        Swal.fire({
-            icon: 'success',
-            title: '¡Perfil actualizado!',
-            text: 'Tus datos se han guardado correctamente.',
-            showConfirmButton: false,
-            timer: 1500
-        });
-        
-        // Actualizar el correo del header si es que se cambió
-        const correoGuardado = localStorage.getItem("correoUsuario");
-        const correoHeader = document.getElementById("correoHeader");
-        if(correoGuardado && correoHeader) {
-            correoHeader.textContent = correoGuardado;
+    
+        try {
+            const response = await fetch(API_URL, {
+                method: 'PUT',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(payload)
+            });
+    
+            if (response.ok) {
+                // ... lógica para ocultar inputs y mostrar textos ...
+                Swal.fire({ icon: 'success', title: '¡Perfil actualizado!', timer: 1500, showConfirmButton: false });
+            } else {
+                const err = await response.json();
+                Swal.fire('Error', err.error || 'No se pudo actualizar', 'error');
+            }
+        } catch (error) {
+            Swal.fire('Error', 'Fallo de conexión con AWS', 'error');
         }
     });
-
 });
+
