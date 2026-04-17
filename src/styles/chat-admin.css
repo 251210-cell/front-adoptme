@@ -480,3 +480,81 @@ body { scrollbar-width: none; -ms-overflow-style: none; }
     align-items: center;
     justify-content: center;
 }
+
+/* =================================================== */
+/* RESPONSIVE MOBILE                                   */
+/* =================================================== */
+@media (max-width: 900px) {
+    .admin-header { padding: 0 16px; height: 60px; }
+    .logo-area { font-size: 16px; }
+    .header-stats { gap: 14px; font-size: 12px; }
+    .sidebar { width: 280px; }
+    .sidebar-top { padding: 18px 14px; }
+    .sidebar-top h2 { font-size: 18px; }
+    .detalle-card { padding: 24px 18px; }
+    .detalle-header h2 { font-size: 20px; }
+    .info-grid { grid-template-columns: 1fr; gap: 10px; }
+    .solicitud-avatar { width: 52px; height: 52px; }
+}
+
+@media (max-width: 700px) {
+    body { height: auto; overflow-y: auto; }
+    .admin-header {
+        height: auto;
+        flex-direction: column;
+        gap: 8px;
+        padding: 10px 14px;
+    }
+    .header-stats { width: 100%; justify-content: center; }
+    .layout-container { flex-direction: column; height: auto; }
+    .sidebar {
+        width: 100%;
+        max-height: 40vh;
+        border-right: none;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .chat-panel { min-height: 60vh; }
+    .chat-list { padding: 10px; }
+    .list-item { padding: 12px; }
+    .list-avatar { width: 40px; height: 40px; font-size: 14px; }
+    .detalle-card { padding: 18px 14px; }
+    .detalle-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    .solicitud-user-info { gap: 12px; }
+    .solicitud-avatar { width: 48px; height: 48px; }
+    .detalle-header h2 { font-size: 18px; }
+    .section-heading { font-size: 12px; margin: 18px 0 10px; }
+    .info-item { padding: 12px 14px; }
+    .info-label { font-size: 10px; }
+    .info-value { font-size: 13px; }
+    .pet-banner { font-size: 13px; padding: 12px 14px; }
+    .acciones-container { flex-direction: column; gap: 10px; }
+    .btn-action { padding: 14px; font-size: 14px; }
+
+    /* Chat moderno */
+    .modern-chat-header {
+        height: auto;
+        padding: 14px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .user-info-messages { gap: 10px; }
+    .header-avatar { width: 44px; height: 44px; }
+    .modern-chat-messages-area { padding: 16px 14px; }
+    .modern-bubble { max-width: 85%; font-size: 14px; padding: 10px 14px; }
+    .modern-chat-input-bar { padding: 12px 14px; }
+    #modernAdminInput { padding: 12px 14px; font-size: 14px; }
+    .modern-send-btn { width: 44px; height: 44px; }
+}
+
+@media (max-width: 380px) {
+    .admin-header { padding: 8px 12px; }
+    .logo-area { font-size: 14px; }
+    .btn-volver { padding: 6px 12px; font-size: 12px; }
+    .list-avatar { width: 36px; height: 36px; }
+    .item-name { font-size: 13px; }
+}

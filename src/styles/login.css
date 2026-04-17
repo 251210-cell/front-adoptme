@@ -189,3 +189,30 @@ h1 {
 }
 
 .bottom-link a:hover { text-decoration: underline; }
+
+/* =================================================== */
+/* RESPONSIVE MOBILE                                   */
+/* =================================================== */
+@media (max-width: 900px) {
+    .login-container { flex-direction: column; }
+    .login-image {
+        width: 100%;
+        height: 220px;
+        min-height: 220px;
+    }
+    .login-form-section { padding: 30px 20px; }
+    .form-box { max-width: 100%; }
+}
+
+@media (max-width: 600px) {
+    .login-image { height: 160px; min-height: 160px; }
+    .overlay-text { font-size: 18px; padding: 14px; }
+    .login-form-section { padding: 24px 16px; }
+    .form-box h1, .form-box h2 { font-size: 24px; }
+    .subtitle { font-size: 14px; }
+    .input-group input,
+    .input-group select { font-size: 15px; padding: 12px 14px; }
+    .btn-primary { padding: 14px; font-size: 15px; }
+    .remember-forgot { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .bottom-link { font-size: 13px; }
+}

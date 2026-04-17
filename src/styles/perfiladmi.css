@@ -105,3 +105,19 @@ a { text-decoration: none; }
     .profile-card { flex-direction: column; }
     .profile-left { border-right: none; border-bottom: 1px solid #eee; }
 }
+
+/* =================================================== */
+/* RESPONSIVE EXTRA                                    */
+/* =================================================== */
+@media (max-width: 600px) {
+    .main-header, header {
+        height: auto;
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px 16px;
+    }
+    .nav-menu { width: 100%; justify-content: center; flex-wrap: wrap; gap: 10px; margin-left: 0; }
+    .perfil-card, .profile-container { padding: 16px; margin: 10px; }
+    .perfil-grid, .profile-grid { grid-template-columns: 1fr; }
+    .btn-editar, .btn-guardar { width: 100%; padding: 14px; font-size: 15px; }
+}

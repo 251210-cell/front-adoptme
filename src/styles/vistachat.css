@@ -80,3 +80,17 @@ body {
 }
 .btn-send:hover { background: #e65c00;
  transform: scale(1.1); }
+
+/* =================================================== */
+/* RESPONSIVE MOBILE (widget flotante)                 */
+/* =================================================== */
+@media (max-width: 600px) {
+    body, html { height: 100%; }
+    .chat-widget-wrapper, .widget-wrapper { width: 100% !important; height: 100% !important; border-radius: 0; }
+    .chat-header { padding: 12px; }
+    .messages-area, #messages-area { padding: 12px; }
+    .bubble { max-width: 80%; font-size: 14px; }
+    .chat-input-bar { padding: 10px 12px; }
+    #chatInput { font-size: 14px; padding: 10px 14px; }
+    #chatSendBtn { width: 40px; height: 40px; }
+}

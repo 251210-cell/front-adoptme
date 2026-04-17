@@ -117,3 +117,24 @@ a { text-decoration: none; }
 .detail-right { text-align: right; }
 .big-num { font-size: 24px; font-weight: 700; display: block; line-height: 1; }
 .small-pct { font-size: 13px; font-weight: 500; }
+
+/* =================================================== */
+/* RESPONSIVE MOBILE                                   */
+/* =================================================== */
+@media (max-width: 900px) {
+    .stats-grid, .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .stat-card { padding: 18px 14px; }
+}
+
+@media (max-width: 600px) {
+    .admin-header, .main-header {
+        height: auto;
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px 16px;
+    }
+    .stats-grid, .cards-grid { grid-template-columns: 1fr; }
+    .stat-card h3 { font-size: 16px; }
+    .stat-card .number { font-size: 26px; }
+    .chart-container { max-width: 100%; overflow-x: auto; }
+}

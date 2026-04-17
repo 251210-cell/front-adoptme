@@ -190,6 +190,41 @@ a { text-decoration: none; }
 
 /* Responsive */
 @media (max-width: 900px) {
-    .intro-section { flex-direction: column; }
-    .team-grid { grid-template-columns: 1fr; }
+    .main-header { padding: 0 16px; height: 64px; }
+    .logo-container span { font-size: 18px; }
+    .intro-section { flex-direction: column; gap: 24px; padding: 20px 16px; }
+    .intro-text h1 { font-size: 28px; }
+    .intro-text h2 { font-size: 18px; }
+    .intro-text p { font-size: 14px; }
+    .team-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    .objective-card { padding: 20px 16px; }
+}
+
+@media (max-width: 600px) {
+    .main-header {
+        height: auto;
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px 16px;
+        position: relative;
+    }
+    .nav-menu { width: 100%; justify-content: center; flex-wrap: wrap; gap: 10px; margin-left: 0; }
+    .nav-link { font-size: 12px; }
+    .user-profile, .header-buttons { margin-left: auto; }
+    .intro-section { padding: 16px 14px; }
+    .intro-text h1 { font-size: 24px; }
+    .intro-text h2 { font-size: 16px; }
+    .objective-card { padding: 18px 14px; margin: 16px; }
+    .objective-card h3 { font-size: 20px; }
+    .objective-card p { font-size: 14px; }
+    .team-section { padding: 16px 14px; }
+    .team-section h2 { font-size: 20px; }
+    .team-grid { grid-template-columns: 1fr; gap: 14px; }
+    .team-card { padding: 16px; }
+    .avatar-placeholder { width: 80px; height: 80px; }
+}
+
+@media (max-width: 380px) {
+    .nav-menu { gap: 6px; }
+    .nav-link { font-size: 11px; }
 }
