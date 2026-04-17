@@ -41,27 +41,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- 3. BOTÓN CERRAR SESIÓN ---
-    const btnCerrar = document.getElementById('btnCerrarSesion');
-    if (btnCerrar) {
-        btnCerrar.addEventListener('click', (e) => {
-            e.preventDefault();
-            Swal.fire({
-                title: '¿Quieres cerrar sesión?',
-                text: "Tendrás que volver a ingresar para adoptar.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#FF6600',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, salir',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    localStorage.clear();
-                    window.location.reload();
-                }
-            });
+    window.cerrarSesionAdmin = () => {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "Tendrás que volver a iniciar sesión.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#FF6600',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, salir',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.clear();
+                window.location.href = "../../index.html";
+            }
         });
-    }
+    };
 
     // --- 4. GLOBITO DE CHAT ---
     const chatBtn = document.getElementById('chat-bubble-btn');
