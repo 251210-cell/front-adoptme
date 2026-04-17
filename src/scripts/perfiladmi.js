@@ -1,84 +1,81 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const API_BASE = 'http://18.206.62.120:3000/api';
-    
-    // Obtenemos los datos de sesión
     const idAdmin = localStorage.getItem('usuarioId'); 
     const token = localStorage.getItem('token');
-    const rol = localStorage.getItem("userRol");
 
-    // Protección de ruta
-    if (!token || rol !== "admin") {
-        window.location.href = "../../index.html";
-        return;
-    }
+    // 1. Función para actualizar la UI (Input, Texto y Avatar)
+    const actualizarInterfaz = (nombre) => {
+        const display = document.getElementById('perfilNombreDisplay');
+        const avatar = document.getElementById('perfilAvatarImg');
+        if (display) display.textContent = nombre;
+        if (avatar) {
+            avatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(nombre)}&background=FF6600&color=fff&size=150`;
+        }
+    };
 
-    // 1. Cargar Datos desde la Base de Datos al entrar
-    async function cargarDatosDesdeBD() {
+    // 2. Cargar datos desde AWS
+    async function cargarDatos() {
+        if (!idAdmin) return;
         try {
             const res = await fetch(`${API_BASE}/usuarios/${idAdmin}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
-            
-            if (!res.ok) throw new Error("Error al obtener datos");
-            
-            const admin = await res.json();
-
-            // Llenamos el formulario con lo que diga la BD
-            document.getElementById('perfilNombre').value = admin.nombre_usuario;
-            document.getElementById('perfilCorreo').value = admin.email;
-            document.getElementById('perfilNombreDisplay').textContent = admin.nombre_usuario;
-            
-            // Actualizar avatar
-            const avatarImg = document.getElementById('perfilAvatarImg');
-            if (avatarImg) {
-                avatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(admin.nombre_usuario)}&background=FF6600&color=fff&size=150`;
+            if (res.ok) {
+                const admin = await res.json();
+                document.getElementById('perfilNombre').value = admin.nombre_usuario || '';
+                document.getElementById('perfilCorreo').value = admin.email || '';
+                // AGREGADO: Cargar el teléfono desde la BD
+                if(document.getElementById('perfilTelefono')) {
+                    document.getElementById('perfilTelefono').value = admin.telefono || '';
+                }
+                actualizarInterfaz(admin.nombre_usuario || 'Admin');
             }
-        } catch (err) {
-            console.error("Error cargando perfil:", err);
-            // Si falla la API, usamos lo que haya en localStorage como respaldo
-            document.getElementById('perfilNombre').value = localStorage.getItem('nombreUsuario') || 'Admin';
-        }
+        } catch (err) { console.error("Error al conectar con AWS:", err); }
     }
 
-    await cargarDatosDesdeBD();
+    await cargarDatos();
 
-    // 2. Guardar Cambios en la Base de Datos
+    // 3. Guardar cambios en la Base de Datos
     const form = document.getElementById('formPerfilAdmin');
     if (form) {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            // Capturamos AMBOS valores
             const nuevoNombre = document.getElementById('perfilNombre').value.trim();
+            const nuevoTelefono = document.getElementById('perfilTelefono').value.trim();
 
             try {
                 const res = await fetch(`${API_BASE}/usuarios/${idAdmin}`, {
                     method: 'PUT',
                     headers: { 
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}` // Importante para la seguridad
+                        'Authorization': `Bearer ${token}`
                     },
-                    body: JSON.stringify({
-                        nombre_usuario: nuevoNombre
+                    // MANDAMOS AMBOS al Backend
+                    body: JSON.stringify({ 
+                        nombre_usuario: nuevoNombre,
+                        telefono: nuevoTelefono 
                     })
                 });
 
                 if (res.ok) {
-                    // Actualizamos también el localStorage para que el header cambie sin cerrar sesión
                     localStorage.setItem('nombreUsuario', nuevoNombre);
                     
                     await Swal.fire({
                         icon: 'success',
-                        title: '¡Actualizado en la BD!',
-                        text: 'Tus cambios se guardaron en el servidor de AWS.',
-                        timer: 1500,
+                        title: '¡Perfil Actualizado!',
+                        text: 'Los datos han sido actualizados.',
+                        timer: 2000,
                         showConfirmButton: false
                     });
                     location.reload();
                 } else {
-                    Swal.fire('Error', 'No se pudo actualizar en el servidor', 'error');
+                    const errorData = await res.json();
+                    Swal.fire('Error', errorData.error || 'No se pudo actualizar.', 'error');
                 }
             } catch (err) {
-                Swal.fire('Error', 'Fallo de conexión con AWS', 'error');
+                Swal.fire('Error', 'Fallo de red al conectar con AWS.', 'error');
             }
         });
     }
