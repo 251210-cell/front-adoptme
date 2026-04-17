@@ -83,7 +83,22 @@ async function cargarMascotas() {
     try {
         const response = await fetch('http://18.206.62.120:3000/api/mascotas');
         const mascotas = await response.json();
-        
+
+        // Override local: si el usuario ya envió una solicitud por esta mascota,
+        // la mostramos como "Pendiente" aunque la API siga diciendo "Disponible".
+        let pendientesLocales = JSON.parse(localStorage.getItem('mascotasPendientes') || '[]');
+        mascotas.forEach(m => {
+            if (pendientesLocales.includes(parseInt(m.id)) && m.estado === 'Disponible') {
+                m.estado = 'Pendiente';
+            }
+        });
+        // Limpiamos del respaldo las mascotas que la API ya reporta fuera de "Disponible"
+        pendientesLocales = pendientesLocales.filter(id => {
+            const mascota = mascotas.find(x => parseInt(x.id) === parseInt(id));
+            return mascota && mascota.estado === 'Pendiente';
+        });
+        localStorage.setItem('mascotasPendientes', JSON.stringify(pendientesLocales));
+
         // Renderizamos con el color original
         grid.innerHTML = mascotas.map(m => {
             const estadoClase = m.estado ? m.estado.toLowerCase() : 'disponible';
@@ -102,6 +117,19 @@ async function cargarMascotas() {
                 </div>
             </div>
         `}).join('');
+
+        // --- Abrir perfil automáticamente si viene ?abrirPerfil=ID en la URL ---
+        const params = new URLSearchParams(window.location.search);
+        const idAbrir = params.get('abrirPerfil');
+        if (idAbrir) {
+            const mascotaEncontrada = mascotas.find(m => String(m.id) === String(idAbrir));
+            if (mascotaEncontrada) {
+                window.abrirModalPerfil(mascotaEncontrada);
+            }
+            // Limpiamos el query param de la URL para que no se vuelva a disparar
+            const urlLimpia = window.location.pathname;
+            window.history.replaceState({}, document.title, urlLimpia);
+        }
     } catch (error) {
         console.error("Error API:", error);
     }
@@ -122,6 +150,12 @@ window.abrirModalPerfil = (mascota) => {
     document.getElementById('modal-condicion').innerText = mascota.condicion_especial || "Sin condiciones especiales";
     document.getElementById('modal-descripcion').innerText = mascota.descripcion || "Esperando por un hogar.";
 
+    // Refugio dinámico (coherente con lo guardado en agregarmascota)
+    const refugioEl = document.getElementById('modal-refugio');
+    if (refugioEl) {
+        refugioEl.innerText = mascota.refugio || 'Refugio Patitas Felices';
+    }
+
     if (document.getElementById('modal-nombre-bio')) {
         document.getElementById('modal-nombre-bio').innerText = mascota.nombre;
     }
@@ -132,16 +166,24 @@ window.abrirModalPerfil = (mascota) => {
         const estadoActual = mascota.estado || 'Disponible';
         badgeEstado.innerText = estadoActual;
 
-        // Reset de colores
-        badgeEstado.style.backgroundColor = ''; 
+        // Reset de estilos
+        badgeEstado.style.backgroundColor = '';
+        badgeEstado.style.background = '';
+        badgeEstado.style.color = '#ffffff';
+        badgeEstado.style.textShadow = '';
+        badgeEstado.style.boxShadow = '';
+        badgeEstado.style.animation = '';
+
         const lowerEstado = estadoActual.toLowerCase();
 
         if (lowerEstado === 'adoptado') {
-            badgeEstado.style.backgroundColor = '#007bff'; // Rojo
+            badgeEstado.style.backgroundColor = '#007bff';
         } else if (lowerEstado === 'pendiente') {
-            badgeEstado.style.backgroundColor = '#FFCC00'; // Naranja/Amarillo
+            badgeEstado.style.background = 'linear-gradient(135deg, #FFEA00, #FFC400)';
+            badgeEstado.style.color = '#ffffff';
+            badgeEstado.style.textShadow = '0 1px 2px rgba(0,0,0,0.25)';
         } else {
-            badgeEstado.style.backgroundColor = '#2ECC71'; // Verde
+            badgeEstado.style.backgroundColor = '#2ECC71';
         }
     }
 
@@ -153,7 +195,7 @@ window.abrirModalPerfil = (mascota) => {
         if (estadoBotones === 'disponible') {
             footerVert.innerHTML = `
                 <button class="btn-adopt-vert" onclick="window.irAFuncionSolicitud()">
-                    <i class="far fa-heart"></i> Quiero Adoptarlo <i class="fas fa-paw"></i>
+                    Quiero Adoptarlo <i class="fas fa-paw"></i>
                 </button>
             `;
         } else if (estadoBotones === 'adoptado') {

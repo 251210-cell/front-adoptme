@@ -1,13 +1,71 @@
-document.addEventListener('DOMContentLoaded', () => {
+// El backend expone PATCH /api/mascotas/:id/estado con body { estado }
+// (ver backend-adoptme/routes/mascotasRoutes.js:33).
+async function actualizarEstadoMascota(idMascota, nuevoEstado) {
+    const API_BASE = 'http://18.206.62.120:3000/api';
+    try {
+        const res = await fetch(`${API_BASE}/mascotas/${idMascota}/estado`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ estado: nuevoEstado })
+        });
+        if (res.ok) return true;
+        const errText = await res.text();
+        console.warn('[estado-mascota] Falló:', res.status, errText);
+    } catch (e) {
+        console.warn('[estado-mascota] Error de red:', e);
+    }
+    return false;
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
     const API_BASE = 'http://18.206.62.120:3000/api';
     const formularioAdopcion = document.getElementById('adoptionForm');
 
+    // --- 0. CARGAR INFORMACIÓN DEL USUARIO EN HEADER Y FORMULARIO ---
+    const idUsuarioLS = localStorage.getItem('usuarioId');
+    const nombreLS = localStorage.getItem('nombreUsuario') || 'Usuario';
+
+    const nombreDisplay = document.getElementById('nombre-display');
+    const avatarImg = document.getElementById('user-avatar-img');
+    const inputNombre = document.getElementById('nombre');
+
+    if (nombreDisplay) nombreDisplay.innerText = nombreLS;
+    if (avatarImg) {
+        avatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(nombreLS)}&background=FF6600&color=fff&rounded=true`;
+    }
+
+    // Pre-llenamos con el nombre del localStorage por si la API falla
+    if (inputNombre) inputNombre.value = nombreLS;
+
+    // Intentamos traer la info completa del usuario desde la API
+    if (idUsuarioLS) {
+        try {
+            const resUser = await fetch(`${API_BASE}/usuarios/${idUsuarioLS}`);
+            if (resUser.ok) {
+                const user = await resUser.json();
+
+                if (inputNombre && (user.nombre_usuario || user.nombre)) {
+                    inputNombre.value = user.nombre_usuario || user.nombre;
+                }
+
+                // Edad / ocupación NO se prellenan: son campos específicos de esta
+                // solicitud (no del perfil) y deben ser escritos por el usuario aquí.
+
+                if (nombreDisplay && (user.nombre_usuario || user.nombre)) {
+                    nombreDisplay.innerText = user.nombre_usuario || user.nombre;
+                }
+            }
+        } catch (err) {
+            console.log("No se pudo cargar info del usuario desde la API:", err);
+        }
+    }
+
     if (formularioAdopcion) {
         formularioAdopcion.addEventListener('submit', async (e) => {
-            e.preventDefault(); // Detenemos la recarga para que el código trabaje
-            
+            e.preventDefault();
+
             const idUsuario = localStorage.getItem('usuarioId') || 1;
-            const idMascota = localStorage.getItem('mascotaSeleccionadaId') || 1; 
+            const idMascota = localStorage.getItem('mascotaSeleccionadaId') || 1;
 
             // 1. Validación de una sola solicitud
             try {
@@ -18,24 +76,47 @@ document.addEventListener('DOMContentLoaded', () => {
                         return Swal.fire('Atención', 'Ya tienes una solicitud activa. No puedes enviar otra.', 'warning');
                     }
                 }
-            } catch (err) { 
-                console.log("Error validando historial, procediendo..."); 
+            } catch (err) {
+                console.log("Error validando historial, procediendo...");
             }
 
-            // 2. Captura de datos con los nombres EXACTOS de tu Base de Datos
+            // 2. Captura y validación de datos
+            const edadRaw = document.getElementById('edad').value.trim();
+            const vEdad = edadRaw ? parseInt(edadRaw, 10) : null;
+            const vOcupacion = document.getElementById('ocupacion').value.trim();
+            const vMotivo = document.getElementById('motivo').value.trim();
+            const vMascotas = document.querySelector('input[name="mascotas"]:checked')?.value === 'si' ? 'Si' : 'No';
+            const vRenta = document.getElementById('renta').value.trim() || 'N/A';
+            const vEspacio = document.getElementById('espacio').value.trim() || 'N/A';
+
+            // Validación cliente antes de enviar — para evitar que el backend
+            // reciba NaN/"" y los guarde como null.
+            if (!vEdad || Number.isNaN(vEdad)) {
+                return Swal.fire('Atención', 'Ingresa una edad válida.', 'warning');
+            }
+            if (!vOcupacion) {
+                return Swal.fire('Atención', 'Ingresa tu ocupación.', 'warning');
+            }
+            if (!vMotivo) {
+                return Swal.fire('Atención', 'Cuéntanos por qué deseas adoptar.', 'warning');
+            }
+
+            // Payload con los nombres EXACTOS que la API usa en su respuesta.
             const datos = {
-                id_usuario: parseInt(idUsuario), 
+                id_usuario: parseInt(idUsuario),
                 id_mascota: parseInt(idMascota),
-                edad_usuario: parseInt(document.getElementById('edad').value), 
-                ocupacion: document.getElementById('ocupacion').value,
-                motivo_adopcion: document.getElementById('motivo').value,
-                tiene_mascotas_actuales: document.querySelector('input[name="mascotas"]:checked')?.value === 'si' ? 'Si' : 'No',
-                permiso_casero: document.getElementById('renta').value || 'N/A',
-                espacio_suficiente: document.getElementById('espacio').value || 'N/A',
+                edad_usuario: vEdad,
+                ocupacion: vOcupacion,
+                motivo_adopcion: vMotivo,
+                tiene_mascotas_actuales: vMascotas,
+                permiso_casero: vRenta,
+                espacio_suficiente: vEspacio,
                 estado: 'Pendiente'
             };
 
-            // 3. Envío único de la solicitud
+            console.log('[solicitud] Enviando al backend:', datos);
+
+            // 3. Envío de la solicitud
             try {
                 const res = await fetch(`${API_BASE}/solicitudes`, {
                     method: 'POST',
@@ -43,15 +124,38 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify(datos)
                 });
 
+                // Log de la respuesta para diagnosticar qué campos realmente guardó
+                const cloneForLog = res.clone();
+                try {
+                    const dataRes = await cloneForLog.json();
+                    console.log('[solicitud] Respuesta del backend:', dataRes);
+                } catch (_) { /* noop */ }
+
                 if (res.ok) {
-                    await Swal.fire({ 
-                        title: '¡Enviado!', 
+                    // 4. Actualizamos el estado de la mascota a "Pendiente".
+                    //    El PUT parcial da 400 (el endpoint valida el objeto completo),
+                    //    así que traemos la mascota actual, cambiamos sólo el estado
+                    //    y reenviamos. Intentamos varias estrategias en orden.
+                    await actualizarEstadoMascota(idMascota, 'Pendiente');
+
+                    // 5. Respaldo en localStorage: marcamos esta mascota como pendiente
+                    //    para que la UI la muestre así aunque la API aún no refleje el cambio.
+                    try {
+                        const pendientes = JSON.parse(localStorage.getItem('mascotasPendientes') || '[]');
+                        if (!pendientes.includes(parseInt(idMascota))) {
+                            pendientes.push(parseInt(idMascota));
+                            localStorage.setItem('mascotasPendientes', JSON.stringify(pendientes));
+                        }
+                    } catch (errLS) { /* noop */ }
+
+                    await Swal.fire({
+                        title: '¡Enviado!',
                         text: 'Tu solicitud se registró correctamente',
-                        icon: 'success', 
-                        timer: 2000, 
-                        showConfirmButton: false 
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
                     });
-                    window.location.href = './solicitudenviada.html'; 
+                    window.location.href = './solicitudenviada.html';
                 } else {
                     const errorData = await res.json();
                     Swal.fire('Error', errorData.message || 'Error al guardar en la BD', 'error');

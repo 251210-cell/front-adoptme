@@ -12,15 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2. Enviar Mensaje a la BD
+    // 2. Enviar Mensaje
     async function enviarMensaje() {
         const text = input.value.trim();
-        // Usamos los nombres de variables que guardaste en el login/solicitud
-        const userId = localStorage.getItem('usuarioId'); 
+        const userId = localStorage.getItem('usuarioId');
         const mascotaId = localStorage.getItem('mascotaSeleccionadaId');
-        
-        // El destinatario del usuario siempre es el Admin (ID 1 por defecto usualmente)
-        const adminId = 1; 
+        const adminId = 1;
 
         if (text === "" || !userId) return;
 
@@ -39,6 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (res.ok) {
                 renderMsg(text, 'sent');
                 input.value = "";
+            } else if (res.status === 429) {
+                console.warn("Rate limit al enviar. Espera unos segundos.");
             }
         } catch (err) {
             console.error("Error al enviar:", err);
@@ -47,27 +46,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderMsg(text, type) {
         const msgDiv = document.createElement('div');
-        msgDiv.className = `message ${type}`; // 'sent' o 'received'
+        msgDiv.className = `message ${type}`;
         msgDiv.innerHTML = `<div class="bubble">${text}</div>`;
         msgArea.appendChild(msgDiv);
         msgArea.scrollTop = msgArea.scrollHeight;
     }
 
-    // 3. Cargar mensajes (Polling cada 3 segundos)
+    // 3. Cargar mensajes (una sola vez, sin polling)
     async function cargarMensajes() {
         const userId = localStorage.getItem('usuarioId');
         if (!userId) return;
 
         try {
-            // Buscamos los mensajes donde el usuario sea remitente O destinatario
             const res = await fetch(`http://18.206.62.120:3000/api/mensajes/${userId}`);
+
+            if (!res.ok) {
+                console.warn("Respuesta no OK:", res.status);
+                return;
+            }
+
+            const contentType = res.headers.get('content-type') || '';
+            if (!contentType.includes('application/json')) {
+                const textoError = await res.text();
+                console.warn("Respuesta no-JSON:", textoError.slice(0, 100));
+                return;
+            }
+
             const mensajes = await res.json();
-            
+
             msgArea.innerHTML = '<p class="chat-intro">Historial de conversación</p>';
-            
             mensajes.forEach(m => {
-                // Si el remitente es el usuario, es 'sent' (derecha)
-                // Si el remitente NO es el usuario, es 'received' (izquierda)
                 const tipo = (m.id_remitente == userId) ? 'sent' : 'received';
                 renderMsg(m.contenido, tipo);
             });
@@ -79,7 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnSend) btnSend.addEventListener('click', enviarMensaje);
     input?.addEventListener('keypress', (e) => { if (e.key === 'Enter') enviarMensaje(); });
 
-    // Actualización automática cada 3 segundos
-    setInterval(cargarMensajes, 3000);
+    // Carga inicial de mensajes
     cargarMensajes();
 });

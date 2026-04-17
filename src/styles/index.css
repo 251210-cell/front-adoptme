@@ -129,7 +129,7 @@ a { text-decoration: none; }
 }
 .badge { position: absolute; top: 15px; right: 15px; padding: 4px 12px; border-radius: 20px; color: white; font-size: 12px; font-weight: 600; text-transform: uppercase; }
 .badge.disponible { background-color: #28a745; }
-.badge.pendiente { background-color: #ffc107; color: #333; }
+.badge.pendiente { background: linear-gradient(135deg, #FFEA00, #FFC400); color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.25); }
 .badge.adoptado { background-color: #007bff; }
 .card-info { padding: 20px; }
 .pet-header h3 { font-size: 18px; color: #222; margin: 0; }
@@ -472,5 +472,9 @@ a { text-decoration: none; }
 }
 
 .status-badge.disponible { background-color: #259453; }
-.status-badge.pendiente { background-color: #f1c40f; color: #333; }
+.status-badge.pendiente {
+    background: linear-gradient(135deg, #FFEA00, #FFC400);
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
 .status-badge.adoptado { background-color: #007bff;  }

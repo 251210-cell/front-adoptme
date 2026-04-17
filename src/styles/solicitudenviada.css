@@ -1,170 +1,123 @@
 /* --- Reseteo Básico --- */
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
-body { 
-    background-color: #f2f4f7; 
-    color: #333; 
-    min-height: 100vh; /* Ocupa al menos toda la pantalla */
-    display: flex; 
-    flex-direction: column; 
-    /* IMPORTANTE: Quitamos overflow: hidden para que puedas bajar si no cabe */
-    overflow-y: auto; 
+body {
+    background-color: #fdfdfd;
+    background-image: linear-gradient(rgba(255,255,255,0.96), rgba(255,255,255,0.96)),
+                      url('https://i.pinimg.com/originals/81/2f/18/812f18f673f8484a0c5c36199341656c.png');
+    background-size: 200px;
+    background-repeat: repeat;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 a { text-decoration: none; }
 
-/* --- HEADER --- */
+/* --- HEADER (consistente con resto de la app) --- */
 .main-header {
     background-color: #ffffff;
     height: 80px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 50px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    /* Quitamos sticky/fixed para evitar problemas de superposición en pantallas chicas */
-    position: relative; 
+    padding: 0 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
     z-index: 100;
 }
 
-.logo-container { 
-    display: flex; align-items: center; gap: 10px; 
-    font-size: 22px; font-weight: 800; color: #333; 
+.logo-container {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 22px; font-weight: 800; color: #333;
 }
 .logo-icon { color: #FF6600; font-size: 26px; }
 
-.nav-menu { display: flex; align-items: center; gap: 30px; }
+.nav-menu { display: flex; align-items: center; gap: 30px; margin-left: auto; }
 
-.nav-link { 
-    color: #666; font-weight: 600; font-size: 15px; 
-    display: flex; align-items: center; gap: 8px; transition: color 0.3s; 
+.nav-link {
+    color: #666; font-weight: 600; font-size: 15px;
+    display: flex; align-items: center; gap: 8px; transition: color 0.3s;
 }
 .nav-link:hover { color: #FF6600; }
-
-.user-profile-icon { font-size: 20px; color: #666; cursor: pointer; }
 
 /* --- CONTENEDOR PRINCIPAL --- */
 .main-centered-content {
     flex-grow: 1;
     display: flex;
     justify-content: center;
-    align-items: center; /* Centra verticalmente */
-    padding: 40px 20px; /* Margen arriba y abajo para que no pegue */
+    align-items: center;
+    padding: 40px 20px;
 }
 
-/* --- TARJETA BLANCA MASIVA --- */
+/* --- TARJETA DE CONFIRMACIÓN --- */
 .confirmation-card {
     background: #ffffff;
     border-radius: 20px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-    
-    /* TAMAÑO GRANDE PERO FLUIDO */
-    max-width: 1000px; /* Ancho máximo generoso */
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    max-width: 520px;
     width: 100%;
-    /* Quitamos height fija para que crezca según lo que tiene adentro */
-    height: auto; 
-    
-    padding: 60px 40px; /* Mucho espacio interno */
-    margin: 20px auto; /* Centrado extra */
-    
+    padding: 45px 40px 35px;
     text-align: center;
+    position: relative;
+    animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Check animado arriba de la tarjeta */
+.success-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FF6600, #ff8533);
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 8px 20px rgba(255, 102, 0, 0.25);
+    color: white;
+    font-size: 32px;
 }
 
 .confirmation-card h1 {
-    font-size: 42px; 
-    color: #1a1a1a;
-    margin-bottom: 10px;
-    font-weight: 800;
+    font-size: 26px;
+    color: #222;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.underline {
+    width: 50px;
+    height: 4px;
+    background-color: #FF6600;
+    margin: 0 auto 18px;
+    border-radius: 2px;
 }
 
 .subtitle {
-    font-size: 22px;
-    color: #555;
-    margin-bottom: 40px;
-    font-weight: 500;
-}
-
-/* Imagen del Perro */
-.dog-photo-container img {
-    width: 240px; /* Tamaño balanceado */
-    height: 240px;
-    object-fit: cover;
-    border-radius: 20px;
-    margin-bottom: 40px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-}
-
-/* Cuadro de Información */
-.info-box {
-    border: 1px solid #FF6600;
-    background-color: #f8fbff; 
-    border-radius: 12px;
-    padding: 25px 40px;
-    margin-bottom: 30px;
-    max-width: 750px;
-    width: 100%;
-}
-
-.info-box p {
-    color: #444;
-    font-size: 16px;
-    line-height: 1.6;
-}
-
-/* Enlace Ver Perfil */
-.profile-link {
+    font-size: 15px;
     color: #666;
-    text-decoration: underline;
-    font-size: 16px;
-    margin-bottom: 40px;
-    display: inline-block;
+    margin-bottom: 25px;
     font-weight: 500;
-    cursor: pointer;
+    line-height: 1.5;
 }
+.subtitle span { color: #FF6600; font-weight: 700; }
 
-/* Botón Naranja */
-.btn-home {
-    background-color: #FF6600;
-    color: white;
-    padding: 16px 60px;
-    border-radius: 50px;
-    font-weight: 700;
-    font-size: 18px;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(255, 102, 0, 0.3);
-    display: inline-block; /* Asegura que se respete el padding */
-}
-
-.btn-home:hover {
-    background-color: #e65c00;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(255, 102, 0, 0.4);
-}
-body {
-    background-color: #fdfdfd;
-    background-image: url('https://www.transparenttextures.com/patterns/paws.png');
-    background-attachment: fixed;
-}
-
-.confirmation-card {
-    background: white;
-    max-width: 500px;
-    margin: 80px auto;
-    padding: 40px;
-    border-radius: 30px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.06);
-    text-align: center;
-}
-
+/* Foto del perrito */
 .dog-photo-container {
-    width: 180px;
-    height: 180px;
-    margin: 20px auto;
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 25px;
     border-radius: 50%;
     overflow: hidden;
-    border: 5px solid #FF6600;
+    border: 4px solid #FF6600;
+    box-shadow: 0 8px 20px rgba(255, 102, 0, 0.2);
+    background-color: #f0f2f5;
 }
 
 .dog-photo-container img {
@@ -173,20 +126,83 @@ body {
     object-fit: cover;
 }
 
-.btn-home {
-    display: block;
-    background: #FF6600;
-    color: white;
-    padding: 15px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: bold;
-    margin-bottom: 15px;
+/* Cuadro informativo */
+.info-box {
+    background-color: #fff8f2;
+    border: 1px solid #ffd9bf;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    text-align: left;
 }
 
-.link-secondary {
-    color: #666;
-    text-decoration: underline;
+.info-box i {
+    color: #FF6600;
+    font-size: 18px;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.info-box p {
+    color: #555;
+    font-size: 13.5px;
+    line-height: 1.55;
+    margin: 0;
+}
+
+/* Botón primario naranja */
+.btn-home {
+    display: block;
+    background-color: #FF6600;
+    color: white;
+    padding: 13px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    text-align: center;
+    border: 2px solid #FF6600;
+    transition: all 0.3s ease;
+    margin-bottom: 12px;
     cursor: pointer;
+    width: 100%;
+}
+
+.btn-home:hover {
+    background-color: #e65c00;
+    border-color: #e65c00;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(255, 102, 0, 0.25);
+}
+
+/* Botón secundario (ver perfil) */
+.profile-link {
+    display: block;
+    background: transparent;
+    color: #FF6600;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
     font-size: 14px;
+    text-align: center;
+    border: 2px solid #FF6600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    width: 100%;
+}
+
+.profile-link:hover {
+    background-color: #fff0e6;
+}
+
+.profile-link i { margin-right: 6px; }
+
+/* Responsive */
+@media (max-width: 600px) {
+    .confirmation-card { padding: 35px 25px 25px; }
+    .confirmation-card h1 { font-size: 22px; }
+    .main-header { padding: 0 20px; }
+    .nav-menu { gap: 15px; }
 }

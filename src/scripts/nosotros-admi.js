@@ -1,11 +1,13 @@
 let contadorMiembros = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. SEGURIDAD
-    const isLogged = localStorage.getItem('usuarioLogueado');
-    const rol = localStorage.getItem('rolUsuario');
+    // 1. SEGURIDAD (usamos las mismas llaves que login.js)
+    const token = localStorage.getItem('token');
+    const nombreLS = localStorage.getItem('nombreUsuario');
+    const rol = localStorage.getItem('userRol');
+    const isLogged = (!!token && token !== 'undefined') || !!nombreLS;
 
-    if (isLogged !== 'true' || rol !== 'admin') {
+    if (!isLogged || rol !== 'admin') {
         Swal.fire({
             icon: 'error',
             title: 'Acceso denegado',
@@ -62,8 +64,24 @@ function cambiarSeccion(seccionId, tituloSeccion) {
 
 // ==========================================
 
-function cargarDatos() {
-    const datos = JSON.parse(localStorage.getItem('datosNosotros') || '{}');
+const API_NOSOTROS = 'http://18.206.62.120:3000/api/nosotros';
+
+async function cargarDatos() {
+    // Intenta traer datos reales del backend; si falla, usa localStorage como respaldo
+    let datos = {};
+    try {
+        const res = await fetch(API_NOSOTROS);
+        if (res.ok) {
+            datos = await res.json();
+            // Guardamos un cache local para lectura rápida en la vista cliente
+            localStorage.setItem('datosNosotros', JSON.stringify(datos));
+        }
+    } catch (e) {
+        console.warn('No se pudo cargar /api/nosotros, usando cache local:', e);
+    }
+    if (!datos || Object.keys(datos).length === 0) {
+        datos = JSON.parse(localStorage.getItem('datosNosotros') || '{}');
+    }
 
     const valoresPorDefecto = {
         tituloPrincipal: datos.tituloPrincipal || 'Nosotros',
@@ -97,8 +115,16 @@ function cargarDatos() {
     document.getElementById('tituloEquipo').value = valoresPorDefecto.tituloEquipo;
 }
 
-function cargarMiembrosEquipo() {
-    const datos = JSON.parse(localStorage.getItem('datosNosotros') || '{}');
+async function cargarMiembrosEquipo() {
+    // Preferimos datos del backend; localStorage es respaldo
+    let datos = {};
+    try {
+        const res = await fetch(API_NOSOTROS);
+        if (res.ok) datos = await res.json();
+    } catch (e) { /* noop */ }
+    if (!datos || Object.keys(datos).length === 0) {
+        datos = JSON.parse(localStorage.getItem('datosNosotros') || '{}');
+    }
     const miembros = datos.miembrosEquipo || [];
     const container = document.getElementById('miembrosEquipo');
     container.innerHTML = '';
@@ -248,7 +274,7 @@ function previewImagenMiembro(input, id) {
     }
 }
 
-function guardarDatos() {
+async function guardarDatos() {
     const imagenIntroBase64 = document.getElementById('imagenIntroBase64').value;
 
     const datos = {
@@ -272,14 +298,45 @@ function guardarDatos() {
         if (nombre && rol) datos.miembrosEquipo.push({ nombre, rol, imagen });
     });
 
+    // Guardado local (cache rápido para la vista cliente y respaldo si la API cae)
     localStorage.setItem('datosNosotros', JSON.stringify(datos));
 
-    Swal.fire({
-        icon: 'success',
-        title: '¡Datos guardados!',
-        text: 'Los cambios se han actualizado con éxito en la página Nosotros.',
-        confirmButtonColor: '#FF6600'
-    });
+    // Guardado real en backend (POST /api/nosotros requiere auth)
+    const token = localStorage.getItem('token');
+    try {
+        const res = await fetch(API_NOSOTROS, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token ? `Bearer ${token}` : ''
+            },
+            body: JSON.stringify(datos)
+        });
+
+        if (res.ok) {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Datos guardados!',
+                text: 'Los cambios se han actualizado en el servidor y serán visibles para todos los usuarios.',
+                confirmButtonColor: '#FF6600'
+            });
+        } else {
+            const err = await res.json().catch(() => ({}));
+            Swal.fire({
+                icon: 'warning',
+                title: 'Guardado parcial',
+                text: `Los cambios se guardaron localmente, pero el servidor respondió ${res.status}. ${err.error || ''}`,
+                confirmButtonColor: '#FF6600'
+            });
+        }
+    } catch (e) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Sin conexión al servidor',
+            text: 'Los cambios se guardaron localmente pero no se pudieron sincronizar.',
+            confirmButtonColor: '#FF6600'
+        });
+    }
 }
 
 function verVistaPrevia() {
