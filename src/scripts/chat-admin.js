@@ -77,24 +77,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
 
                 <div class="detalle-body">
-                    <div class="info-grid">
-                        <div class="info-item"><strong>Edad:</strong> ${solicitud.edad_usuario} años</div>
-                        <div class="info-item"><strong>Ocupación:</strong> ${solicitud.ocupacion}</div>
-                        <div class="info-item"><strong>Mascotas:</strong> ${solicitud.tiene_mascotas_actuales}</div>
-                        <div class="info-item"><strong>Espacio:</strong> ${solicitud.espacio_suficiente}</div>
-                    </div>
-                    <div class="info-block highlight">
-                        <h4>Motivo de adopción:</h4>
-                        <p>"${solicitud.motivo_adopcion}"</p>
-                    </div>
+                  
+
+<div class="info-grid">
+    <div class="info-item"><strong>Edad:</strong> ${solicitud.edad_usuario || '---'} años</div>
+    <div class="info-item"><strong>Ocupación:</strong> ${solicitud.ocupacion || '---'}</div>
+    <div class="info-item"><strong>Mascotas:</strong> ${solicitud.tiene_mascotas_actuales || '---'}</div>
+    <div class="info-item"><strong>Espacio:</strong> ${solicitud.espacio_suficiente || '---'}</div>
+</div>
+
+<div class="info-block highlight">
+    <h4>Motivo de adopción:</h4>
+    <p>"${solicitud.motivo_adopcion || 'Sin motivo'}"</p>
+</div>
                     <div class="pet-banner">
                         <i class="fas fa-paw"></i> Interesado en: <strong>${solicitud.mascota?.nombre}</strong>
                     </div>
                     <hr>
-                    <div class="chat-notificacion-area">
-                        <h4>Mensaje de resolución:</h4>
-                        <textarea id="mensajeResolucion" placeholder="Escribe un mensaje para el adoptante..."></textarea>
-                    </div>
+                   
                     <div class="acciones-container">
                         <button class="btn-action btn-rechazar" onclick="actualizarEstado(${solicitud.id}, 'Rechazada', ${solicitud.id_mascota}, ${solicitud.id_usuario})">
                             <i class="fas fa-times"></i> Rechazar
